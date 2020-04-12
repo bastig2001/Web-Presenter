@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebPresenter", "WebPresenter\WebPresenter.csproj", "{CC86B74E-0A7D-4C50-B038-041BB3E98B4D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC86B74E-0A7D-4C50-B038-041BB3E98B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC86B74E-0A7D-4C50-B038-041BB3E98B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC86B74E-0A7D-4C50-B038-041BB3E98B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC86B74E-0A7D-4C50-B038-041BB3E98B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
