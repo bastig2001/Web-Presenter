@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebPresenter.Hubs;
 
 namespace WebPresenter {
     public class Startup {
@@ -20,6 +21,8 @@ namespace WebPresenter {
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +46,8 @@ namespace WebPresenter {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapHub<TextHub>("/text");
             });
 
             app.UseSpa(spa => {

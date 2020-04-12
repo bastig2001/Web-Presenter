@@ -17,6 +17,12 @@
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
         <Content Remove="$(SpaRoot)**" />
+        <Content Include="ClientApp\src\components\AudienceView.js" />
+        <Content Include="ClientApp\src\components\Presentation.js" />
+        <Content Include="ClientApp\src\components\PresentationControls.js" />
+        <Content Include="ClientApp\src\components\PresentationMenu.js" />
+        <Content Include="ClientApp\src\components\PresenterView.js" />
+        <Content Include="ClientApp\src\services\TextService.js" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     </ItemGroup>
