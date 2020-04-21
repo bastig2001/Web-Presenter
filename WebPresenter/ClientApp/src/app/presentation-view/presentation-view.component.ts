@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, SecurityContext} from '@angular/core';
+import {PresentationsService} from "../presentations.service";
+import {PresentationState, TextState} from "../presentation";
+import {DomSanitizer} from "@angular/platform-browser";
+import {Remarkable} from 'remarkable';
 
 @Component({
   selector: 'app-presentation-view',
@@ -6,8 +10,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./presentation-view.component.css']
 })
 export class PresentationViewComponent implements OnInit {
+  private PresentationState = PresentationState;
+  private TextState = TextState;
+  private SecurityContext = SecurityContext;
+  private readonly remarker = new Remarkable();
 
-  constructor() { }
+  constructor(public ps: PresentationsService,
+              public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }

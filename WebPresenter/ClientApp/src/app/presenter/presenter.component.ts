@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {PresentationsService} from "../presentations.service";
 
 @Component({
   selector: 'app-presenter',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PresenterComponent implements OnInit {
 
-  constructor() { }
+  constructor(public ps: PresentationsService) { }
 
   ngOnInit() {
   }

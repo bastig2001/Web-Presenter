@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebPresenter.Hubs;
+using WebPresenter.Services;
 
 namespace WebPresenter {
     public class Startup {
@@ -19,6 +21,10 @@ namespace WebPresenter {
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+
+            services.AddSignalR(options => options.EnableDetailedErrors = true);
+
+            services.AddSingleton<IPresentationsService, InMemoryPresentationsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +50,7 @@ namespace WebPresenter {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<PresentationsHub>("/presentations");
             });
 
             app.UseSpa(spa => {

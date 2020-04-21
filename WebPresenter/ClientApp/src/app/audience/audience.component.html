@@ -1,1 +1,7 @@
-<p>audience works!</p>
+<div *ngIf="!ps.isConnecting" class="presentation audience">
+  <app-presentation-menu></app-presentation-menu>
+  <app-presentation-view></app-presentation-view>
+</div>
+<em *ngIf="ps.isConnecting">
+  Loading...
+</em>

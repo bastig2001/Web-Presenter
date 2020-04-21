@@ -1,1 +1,8 @@
-<p>presenter works!</p>
+<div *ngIf="!ps.isConnecting" class="presentation presenter">
+  <app-presentation-menu></app-presentation-menu>
+  <app-presentation-view></app-presentation-view>
+  <app-presentation-controls></app-presentation-controls>
+</div>
+<em *ngIf="ps.isConnecting">
+  Loading...
+</em>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {PresentationsService} from "../presentations.service";
 
 @Component({
   selector: 'app-presentation-menu',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PresentationMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(public ps: PresentationsService) { }
 
   ngOnInit() {
   }
