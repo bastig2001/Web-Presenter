@@ -8,7 +8,7 @@ import {PresentationsService} from "../presentations.service";
 })
 export class AudienceComponent implements OnInit {
 
-  constructor(public ps: PresentationsService) { }
+  constructor(private ps: PresentationsService) { }
 
   ngOnInit() {
   }

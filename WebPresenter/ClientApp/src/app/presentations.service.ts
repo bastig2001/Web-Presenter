@@ -26,16 +26,16 @@ export class PresentationsService {
   }
 
   private registerCallbacks() {
-    this.connection.on("SetPresentationState", this.setPresentationState_local);
-    this.connection.on("SetTextState", this.setTextState_local);
-    this.connection.on("SetName", this.setName_local);
-    this.connection.on("SetText", this.setText_local);
-    this.connection.on("SetPermanentNotes", this.setPermanentNotes_local);
-    this.connection.on("GoToSlide", this.goToSlide_local);
-    this.connection.on("MoveToNextSlide", this.moveToNextSlide_local);
-    this.connection.on("MoveToPreviousSlide", this.moveToPreviousSlide_local);
-    this.connection.on("SetSlideNotes", this.setSlideNotes_local);
-    this.connection.on("ClearSlideNotes", this.clearSlideNotes_local);
+    this.connection.on("SetPresentationState", this.setPresentationState_local.bind(this));
+    this.connection.on("SetTextState", this.setTextState_local.bind(this));
+    this.connection.on("SetName", this.setName_local.bind(this));
+    this.connection.on("SetText", this.setText_local.bind(this));
+    this.connection.on("SetPermanentNotes", this.setPermanentNotes_local.bind(this));
+    this.connection.on("GoToSlide", this.goToSlide_local.bind(this));
+    this.connection.on("MoveToNextSlide", this.moveToNextSlide_local.bind(this));
+    this.connection.on("MoveToPreviousSlide", this.moveToPreviousSlide_local.bind(this));
+    this.connection.on("SetSlideNotes", this.setSlideNotes_local.bind(this));
+    this.connection.on("ClearSlideNotes", this.clearSlideNotes_local.bind(this));
     // this.connection.on("ImagePresentationSet",);
   }
 

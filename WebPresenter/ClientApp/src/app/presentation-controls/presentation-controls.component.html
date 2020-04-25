@@ -1,3 +1,84 @@
 <div class="presentation-menu">
-  <p>presentation-controls works!</p>
+  <div class="radio-group" id="presentation-state-radio-group">
+    <label>
+      <input type="radio" [value]="PresentationState.Text" name="presentation-state"
+             [checked]="ps.presentation.presentationState == PresentationState.Text"
+             (change)="ps.setPresentationState(PresentationState.Text)"
+      />
+      <span>Text</span>
+    </label>
+    <label>
+      <input type="radio" [value]="PresentationState.Slides" name="presentation-state"
+             [checked]="ps.presentation.presentationState == PresentationState.Slides"
+             (change)="ps.setPresentationState(PresentationState.Slides)"
+      />
+      <span>Slides</span>
+    </label>
+  </div>
+  <div class="field" id="name-field">
+    <label>
+      <span>Name:</span>
+      <input type="text" [(ngModel)]="nameInput"/>
+      <button (click)="setName()">Set Name</button>
+      <button (click)="cancelNameInput()">Cancel</button>
+    </label>
+  </div>
+  <textarea id="permanent-notes" placeholder="Permanent Notes..."
+            [ngModel]="ps.presentation.permanentNotes"
+            (ngModelChange)="ps.setPermanentNotes($event)"
+  ></textarea>
+
+  <div id="special-controls" [ngSwitch]="ps.presentation.presentationState">
+    <div id="text-controls" *ngSwitchCase="PresentationState.Text">
+      <div class="radio-group" id="text-state-radio-group">
+        <label>
+          <input type="radio" [value]="TextState.Paragraphs" name="text-state"
+                 [checked]="ps.presentation.textState == TextState.Paragraphs"
+                 (change)="ps.setTextState(TextState.Paragraphs)"
+          />
+          <span>Paragraphs</span>
+        </label>
+        <label>
+          <input type="radio" [value]="TextState.Monospace" name="state-state"
+                 [checked]="ps.presentation.textState == TextState.Monospace"
+                 (change)="ps.setTextState(TextState.Monospace)"
+          />
+          <span>Monospace</span>
+        </label>
+        <label>
+          <input type="radio" [value]="TextState.Markdown" name="text-state"
+                 [checked]="ps.presentation.textState == TextState.Markdown"
+                 (change)="ps.setTextState(TextState.Markdown)"
+          />
+          <span>Markdown</span>
+        </label>
+        <label>
+          <input type="radio" [value]="TextState.Html" name="state-state"
+                 [checked]="ps.presentation.textState == TextState.Html"
+                 (change)="ps.setTextState(TextState.Html)"
+          />
+          <span>Html</span>
+        </label>
+      </div>
+      <textarea id="text" placeholder="Text..."
+                [ngModel]="ps.presentation.text"
+                (ngModelChange)="ps.setText($event)"
+      ></textarea>
+    </div>
+    <div id="slide-controls" *ngSwitchCase="PresentationState.Slides">
+      <div class="field" id="move-slides-field">
+        <button (click)="ps.moveToPreviousSlide()">&lt;</button>
+        <button (click)="ps.moveToNextSlide()">&gt;</button>
+      </div>
+      <div class="field" id="go-to-slide-field">
+        <input [(ngModel)]="slideNumberInput" min="1" [max]="ps.presentation.numberOfSlides" step="1"/>
+        <button (click)="goToSlide()">Go To Slide</button>
+      </div>
+      <textarea id="slide-notes" placeholder="Slide Notes..."
+                [ngModel]="ps.presentation.slideNotes[this.ps.presentation.currentSlideNumber]"
+                (ngModelChange)="ps.setSlideNotes(this.ps.presentation.currentSlideNumber, $event)"
+      ></textarea>
+      <button (click)="ps.clearSlideNotes()">Clear All Slide Notes</button>
+    </div>
+  </div>
 </div>

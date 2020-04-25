@@ -15,8 +15,8 @@ export class PresentationViewComponent implements OnInit {
   private SecurityContext = SecurityContext;
   private readonly remarker = new Remarkable();
 
-  constructor(public ps: PresentationsService,
-              public sanitizer: DomSanitizer) { }
+  constructor(private ps: PresentationsService,
+              private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
