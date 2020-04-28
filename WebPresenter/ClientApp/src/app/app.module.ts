@@ -7,8 +7,6 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { AudienceComponent } from './audience/audience.component';
 import { PresenterComponent } from './presenter/presenter.component';
 import { PresentationMenuComponent } from './presentation-menu/presentation-menu.component';
@@ -20,8 +18,6 @@ import { PresentationControlsComponent } from './presentation-controls/presentat
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     AudienceComponent,
     PresenterComponent,
     PresentationMenuComponent,
@@ -34,8 +30,6 @@ import { PresentationControlsComponent } from './presentation-controls/presentat
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
       { path: 'audience', component: AudienceComponent},
       { path: 'presenter', component: PresenterComponent}
     ])
