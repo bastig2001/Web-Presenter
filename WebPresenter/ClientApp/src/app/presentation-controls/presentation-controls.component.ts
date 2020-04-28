@@ -12,6 +12,7 @@ export class PresentationControlsComponent implements OnInit {
   private TextState = TextState;
   private nameInput: string;
   private slideNumberInput: number;
+  private fileInput: File;
 
   constructor(private ps: PresentationsService) { }
 
@@ -37,6 +38,10 @@ export class PresentationControlsComponent implements OnInit {
     ) {
       this.ps.goToSlide(this.slideNumberInput - 1);
     }
+  }
+
+  setFileInput(files: FileList) {
+    this.fileInput = files.item(0);
   }
 
 }

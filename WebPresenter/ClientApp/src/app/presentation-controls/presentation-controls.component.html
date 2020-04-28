@@ -74,11 +74,17 @@
         <input [(ngModel)]="slideNumberInput" min="1" [max]="ps.presentation.numberOfSlides" step="1"/>
         <button (click)="goToSlide()">Go To Slide</button>
       </div>
-      <textarea id="slide-notes" placeholder="Slide Notes..."
-                [ngModel]="ps.presentation.slideNotes[this.ps.presentation.currentSlideNumber]"
-                (ngModelChange)="ps.setSlideNotes(this.ps.presentation.currentSlideNumber, $event)"
-      ></textarea>
-      <button (click)="ps.clearSlideNotes()">Clear All Slide Notes</button>
+      <div class="field" id="slide-notes-field">
+        <textarea id="slide-notes" placeholder="Slide Notes..."
+                  [ngModel]="ps.presentation.slideNotes[this.ps.presentation.currentSlideNumber]"
+                  (ngModelChange)="ps.setSlideNotes(this.ps.presentation.currentSlideNumber, $event)"
+        ></textarea>
+        <button (click)="ps.clearSlideNotes()">Clear All Slide Notes</button>
+      </div>
+      <div class="field" id="file-upload-field">
+        <input type="file" placeholder="image presentation..." (change)="setFileInput($event.target.files)"/>
+        <button (click)="ps.uploadImagePresentation(fileInput)">Upload</button>
+      </div>
     </div>
   </div>
 </div>

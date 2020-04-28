@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
 namespace WebPresenter {
@@ -54,12 +55,12 @@ namespace WebPresenter {
             imagePresentation = new []{""};
         }
         
-        public async void SetImagePresentation(IFormFile multiImageFile) {
+        public async Task SetImagePresentation(IFormFile multiImageFile) {
             imagePresentation = await Helper.GetImagesFromFile(multiImageFile);
             SetNumberOfSlide(imagePresentation.Length);
         }
 
-        public async void SetImagePresentation(MemoryStream multiImageStream) {
+        public async Task SetImagePresentation(MemoryStream multiImageStream) {
             imagePresentation = await Helper.GetImagesFromStream(multiImageStream);
             SetNumberOfSlide(imagePresentation.Length);
         }

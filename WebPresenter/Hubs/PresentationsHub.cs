@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WebPresenter.Services;
@@ -13,94 +9,85 @@ namespace WebPresenter.Hubs {
         public PresentationsHub(IPresentationsService presentationsService) {
             presentation = presentationsService.GetPresentation();
         }
-
-        public Presentation GetPresentation() {
-            return presentation;
-        }
-
+        
         public async Task SetPresentationState(PresentationState presentationState) {
             // presentation.PresentationState = JsonConvert.DeserializeObject<PresentationState>(presentationStateJson);
             presentation.PresentationState = presentationState;
-            await Clients.Others.SendCoreAsync("SetPresentationState",
-                new object[] {presentation.PresentationState});
+            await Clients.Others.SendAsync("SetPresentationState", presentation.PresentationState);
         }
         
         public async Task SetTextState(TextState textState) {
             // presentation.TextState = JsonConvert.DeserializeObject<TextState>(textStateJson);
             presentation.TextState = textState;
-            await Clients.Others.SendCoreAsync("SetTextState",
-                new object[] {presentation.TextState});
+            await Clients.Others.SendAsync("SetTextState", presentation.TextState);
         }
         
         public async Task SetName(string name) {
             presentation.Name = name;
-            await Clients.Others.SendCoreAsync("SetName", 
-                new object[] {presentation.Name});
+            await Clients.Others.SendAsync("SetName", presentation.Name);
         }
         
         public async Task SetText(string text) {
             presentation.Text = text;
-            await Clients.Others.SendCoreAsync("SetText", 
-                new object[] {presentation.Text});
+            await Clients.Others.SendAsync("SetText", presentation.Text);
         }
         
         public async Task SetPermanentNotes(string notes) {
             presentation.PermanentNotes = notes;
-            await Clients.Others.SendCoreAsync("SetPermanentNotes", 
-                new object[] {presentation.PermanentNotes});
+            await Clients.Others.SendAsync("SetPermanentNotes", presentation.PermanentNotes);
         }
         
         public async Task GoToSlide(int slideNumber) {
             presentation.CurrentSlideNumber = slideNumber;
-            await Clients.Others.SendCoreAsync("GoToSlide", 
-                new object[] {presentation.CurrentSlideNumber});
+            await Clients.Others.SendAsync("GoToSlide", presentation.CurrentSlideNumber);
         }
         
         public async Task MoveToNextSlide() {
             presentation.CurrentSlideNumber++;
-            await Clients.Others.SendCoreAsync("MoveToNextSlide", new object[] {});
+            await Clients.Others.SendAsync("MoveToNextSlide");
         }
         
         public async Task MoveToPreviousSlide() {
             presentation.CurrentSlideNumber--;
-            await Clients.Others.SendCoreAsync("MoveToPreviousSlide", new object[] {});
+            await Clients.Others.SendAsync("MoveToPreviousSlide");
         }
         
         public async Task SetSlideNotes(int slideNumber, string notes) {
             presentation.SetSlideNotes(slideNumber, notes);
-            await Clients.Others.SendCoreAsync("setSlideNotes",
-                new object[] {slideNumber, presentation.GetSlideNotes(slideNumber)});
+            await Clients.Others.SendAsync("SetSlideNotes", 
+                slideNumber, presentation.GetSlideNotes(slideNumber));
         }
 
         public async Task ClearSlideNotes() {
             presentation.ClearSlideNotes();
-            await Clients.Others.SendCoreAsync("ClearSlideNotes", new object[] {});
-        }
-
-        public async Task UploadImagePresentation(IAsyncEnumerable<string> stream) {
-            await using (var memoryStream = new MemoryStream()) {
-                var memoryStreamWriter = new StreamWriter(memoryStream);
-                await foreach (var item in stream) {
-                    memoryStreamWriter.Write(item);
-                    await memoryStreamWriter.FlushAsync();
-                }
-
-                presentation.SetImagePresentation(memoryStream);
-            }
-
-            await Clients.All.SendCoreAsync("ImagePresentationSet", new object[] {});
+            await Clients.Others.SendAsync("ClearSlideNotes");
         }
         
-        public async IAsyncEnumerable<string> GetImagePresentation(
-            int delay,
-            [EnumeratorCancellation] 
-            CancellationToken cancellationToken
-            ) {
-            foreach (var image in presentation.ImagePresentation) {
-                cancellationToken.ThrowIfCancellationRequested();
-                yield return image;
-                await Task.Delay(delay, cancellationToken);
-            }
-        }
+        // public async Task UploadImagePresentation(IAsyncEnumerable<string> stream) {
+        //     Console.WriteLine("uploading");
+        //     await using (var memoryStream = new MemoryStream()) {
+        //         var memoryStreamWriter = new StreamWriter(memoryStream);
+        //         await foreach (var item in stream) {
+        //             memoryStreamWriter.Write(item);
+        //             await memoryStreamWriter.FlushAsync();
+        //         }
+        //
+        //         presentation.SetImagePresentation(memoryStream);
+        //     }
+        //
+        //     await Clients.All.SendCoreAsync("ImagePresentationSet", new object[] {});
+        // }
+        //
+        // public async IAsyncEnumerable<string> GetImagePresentation(
+        //     int delay,
+        //     [EnumeratorCancellation] 
+        //     CancellationToken cancellationToken
+        //     ) {
+        //     foreach (var image in presentation.ImagePresentation) {
+        //         cancellationToken.ThrowIfCancellationRequested();
+        //         yield return image;
+        //         await Task.Delay(delay, cancellationToken);
+        //     }
+        // }
     }
 }

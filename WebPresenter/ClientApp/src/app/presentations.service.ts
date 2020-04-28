@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
 import {Presentation, PresentationState, TextState} from "./presentation";
-import {Subject} from "@aspnet/signalr/dist/esm/Utils";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +12,18 @@ export class PresentationsService {
   presentation: Presentation;
   isLoading: boolean = false;
   isConnecting: boolean = true;
+  isLoadingPresentation: boolean = false;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.connection = new HubConnectionBuilder()
-      .withUrl("/presentations", {transport: HttpTransportType.WebSockets})
+      .withUrl("/hubs/presentations", {transport: HttpTransportType.WebSockets})
       .configureLogging(LogLevel.Information)
       .build();
 
+    this.getPresentation();
     this.registerCallbacks();
     this.connection.start()
-      .then(() => this.getPresentation())
+      .then(() => this.isConnecting = false)
       .catch(err => console.error("A connection error has occured.", err));
   }
 
@@ -36,15 +38,19 @@ export class PresentationsService {
     this.connection.on("MoveToPreviousSlide", this.moveToPreviousSlide_local.bind(this));
     this.connection.on("SetSlideNotes", this.setSlideNotes_local.bind(this));
     this.connection.on("ClearSlideNotes", this.clearSlideNotes_local.bind(this));
-    // this.connection.on("ImagePresentationSet",);
+    this.connection.on("SetImagePresentation", this.getImagePresentation.bind(this));
   }
 
-  private getPresentation() {
-    this.connection.invoke("GetPresentation")
-      .then(value => {
-        this.presentation = value;
-        this.isConnecting = false;
-      });
+  getPresentation() {
+    this.isLoadingPresentation = true;
+    this.http.get<Presentation>("/controllers/presentations")
+      .subscribe(
+        presentation => {
+          this.presentation = presentation;
+          this.isLoadingPresentation = false;
+        },
+        error => console.error(error)
+      );
   }
 
   setPresentationState(state: PresentationState) {
@@ -161,6 +167,29 @@ export class PresentationsService {
 
   private clearSlideNotes_local() {
     this.presentation.slideNotes = new Array<string>(this.presentation.numberOfSlides);
+  }
+
+  uploadImagePresentation(imageFile: File) {
+    this.isLoading = true;
+    let formData = new FormData();
+    formData.append('imageFile', imageFile);
+    this.http.put("/controllers/presentations/image-presentation", formData)
+      .subscribe(
+        () => this.isLoading = false,
+        error => console.error(error)
+      );
+  }
+
+  getImagePresentation() {
+    this.isLoading = true;
+    this.http.get<string[]>("/controllers/presentations/image-presentation")
+      .subscribe(
+        imagePresentation => {
+          this.presentation.imagePresentation = imagePresentation;
+          this.presentation.numberOfSlides = imagePresentation.length;
+        },
+        error => console.log(error)
+      );
   }
 
   // async uploadImagePresentation(imageFile: File) {

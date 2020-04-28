@@ -38,7 +38,7 @@ namespace WebPresenter {
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment()) {
                 app.UseSpaStaticFiles();
@@ -50,7 +50,7 @@ namespace WebPresenter {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
-                endpoints.MapHub<PresentationsHub>("/presentations");
+                endpoints.MapHub<PresentationsHub>("hubs/presentations");
             });
 
             app.UseSpa(spa => {
