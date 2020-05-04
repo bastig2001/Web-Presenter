@@ -1,5 +1,5 @@
 namespace WebPresenter.Services {
     public interface IPresentationsService {
-        public Presentation GetPresentation();
+        public Presentation GetPresentation(uint id);
     }
 }

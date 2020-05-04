@@ -19,15 +19,15 @@ namespace WebPresenter.Controllers {
             this.hubContext = hubContext;
         }
 
-        [HttpGet]
-        public Presentation Get() {
-            return service.GetPresentation();
+        [HttpGet("{id}")]
+        public Presentation Get(uint id) {
+            return service.GetPresentation(id);
         }
 
-        [HttpPut("image-presentation")]
-        public async Task<IActionResult> UploadImagePresentation(IFormFile imageFile) {
+        [HttpPut("{id}/image-presentation")]
+        public async Task<IActionResult> UploadImagePresentation(uint id, IFormFile imageFile) {
             try {
-                await service.GetPresentation().SetImagePresentation(imageFile);
+                await service.GetPresentation(id).SetImagePresentation(imageFile);
                 await hubContext.Clients.All.SendAsync("SetImagePresentation");
                 return Ok();
             }
@@ -37,9 +37,9 @@ namespace WebPresenter.Controllers {
             }
         }
 
-        [HttpGet("image-presentation")]
-        public IEnumerable<string> GetImagePresentation() {
-            return service.GetPresentation().ImagePresentation;
+        [HttpGet("{id}/image-presentation")]
+        public IEnumerable<string> GetImagePresentation(uint id) {
+            return service.GetPresentation(id).ImagePresentation;
         }
     }
 }

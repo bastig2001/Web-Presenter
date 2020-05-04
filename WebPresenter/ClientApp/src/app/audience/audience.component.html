@@ -1,7 +1,10 @@
-<div *ngIf="!ps.isConnecting && !ps.isLoadingPresentation" class="presentation audience">
+<div *ngIf="ps.isConnected && !ps.isLoadingPresentation" class="presentation audience">
   <app-presentation-menu></app-presentation-menu>
   <app-presentation-view></app-presentation-view>
 </div>
-<em *ngIf="ps.isConnecting || ps.isLoadingPresentation">
+<em *ngIf="ps.isLoadingPresentation || !ps.isConnected && ps.isLoading">
   Loading...
+</em>
+<em *ngIf="!ps.isConnected && !ps.isLoadingPresentation && !ps.isLoading">
+  Not Connected
 </em>

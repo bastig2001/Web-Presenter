@@ -1,13 +1,16 @@
+using System.Collections.Generic;
+
 namespace WebPresenter.Services {
     public class InMemoryPresentationsService : IPresentationsService {
-        private readonly Presentation presentation;
+        private readonly Dictionary<uint, Presentation> presentations;
 
         public InMemoryPresentationsService() {
-            presentation = new Presentation();
+            presentations = new Dictionary<uint, Presentation>();
+            presentations.Add(1, new Presentation());
         }
         
-        public Presentation GetPresentation() {
-            return presentation;
+        public Presentation GetPresentation(uint id) {
+            return presentations[id];
         }
     }
 }

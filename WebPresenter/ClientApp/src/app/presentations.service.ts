@@ -7,12 +7,13 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class PresentationsService {
-  private connection: HubConnection;
+  private connection: HubConnection = null;
+  private id: number = 0;
 
   presentation: Presentation;
   isLoading: boolean = false;
-  isConnecting: boolean = true;
   isLoadingPresentation: boolean = false;
+  isConnected: boolean = false;
 
   constructor(private http: HttpClient) {
     this.connection = new HubConnectionBuilder()
@@ -20,11 +21,7 @@ export class PresentationsService {
       .configureLogging(LogLevel.Information)
       .build();
 
-    this.getPresentation();
     this.registerCallbacks();
-    this.connection.start()
-      .then(() => this.isConnecting = false)
-      .catch(err => console.error("A connection error has occured.", err));
   }
 
   private registerCallbacks() {
@@ -41,9 +38,23 @@ export class PresentationsService {
     this.connection.on("SetImagePresentation", this.getImagePresentation.bind(this));
   }
 
+  connect(id: number) {
+    this.isLoading = true;
+    this.id = id;
+
+    this.getPresentation();
+
+    this.connection.start()
+      .then(() => {
+        this.isConnected = true;
+        this.isLoading = false;
+      })
+      .catch(err => console.error("A connection error has occured.", err));
+  }
+
   getPresentation() {
     this.isLoadingPresentation = true;
-    this.http.get<Presentation>("/controllers/presentations")
+    this.http.get<Presentation>(`/controllers/presentations/${this.id}`)
       .subscribe(
         presentation => {
           this.presentation = presentation;
@@ -53,10 +64,16 @@ export class PresentationsService {
       );
   }
 
+  disconnect() {
+    this.connection.stop()
+      .then(() => this.isConnected = false)
+      .catch(err => console.error("A connection error has occured, while trying to stop the connection.", err))
+  }
+
   setPresentationState(state: PresentationState) {
     this.isLoading = true;
     this.setPresentationState_local(state);
-    this.connection.invoke("SetPresentationState", state)
+    this.connection.invoke("SetPresentationState", this.id, state)
       .then(() => this.isLoading = false);
   }
 
@@ -67,7 +84,7 @@ export class PresentationsService {
   setTextState(state: TextState) {
     this.isLoading = true;
     this.setTextState_local(state);
-    this.connection.invoke("SetTextState", state)
+    this.connection.invoke("SetTextState", this.id, state)
       .then(() => this.isLoading = false);
   }
 
@@ -78,7 +95,7 @@ export class PresentationsService {
   setName(name: string) {
     this.isLoading = true;
     this.setName_local(name);
-    this.connection.invoke("SetName", name)
+    this.connection.invoke("SetName", this.id, name)
       .then(() => this.isLoading = false);
   }
 
@@ -89,7 +106,7 @@ export class PresentationsService {
   setText(text: string) {
     this.isLoading = true;
     this.setText_local(text);
-    this.connection.invoke("SetText", text)
+    this.connection.invoke("SetText", this.id, text)
       .then(() => this.isLoading = false);
   }
 
@@ -100,7 +117,7 @@ export class PresentationsService {
   setPermanentNotes(notes: string) {
     this.isLoading = true;
     this.setPermanentNotes_local(notes);
-    this.connection.invoke("SetPermanentNotes", notes)
+    this.connection.invoke("SetPermanentNotes", this.id, notes)
       .then(() => this.isLoading = false);
   }
 
@@ -111,7 +128,7 @@ export class PresentationsService {
   goToSlide(slideNumber: number) {
     this.isLoading = true;
     this.goToSlide_local(slideNumber);
-    this.connection.invoke("GoToSlide", slideNumber)
+    this.connection.invoke("GoToSlide", this.id, slideNumber)
       .then(() => this.isLoading = false);
   }
 
@@ -124,7 +141,7 @@ export class PresentationsService {
   moveToNextSlide() {
     this.isLoading = true;
     this.moveToNextSlide_local();
-    this.connection.invoke("MoveToNextSlide")
+    this.connection.invoke("MoveToNextSlide", this.id)
       .then(() => this.isLoading = false);
   }
 
@@ -137,7 +154,7 @@ export class PresentationsService {
   moveToPreviousSlide() {
     this.isLoading = true;
     this.moveToPreviousSlide_local();
-    this.connection.invoke("MoveToPreviousSlide")
+    this.connection.invoke("MoveToPreviousSlide", this.id)
       .then(() => this.isLoading = false);
   }
 
@@ -150,7 +167,7 @@ export class PresentationsService {
   setSlideNotes(slideNumber: number, notes: string) {
     this.isLoading = true;
     this.setSlideNotes_local(slideNumber, notes);
-    this.connection.invoke("SetSlideNotes", slideNumber, notes)
+    this.connection.invoke("SetSlideNotes", this.id, slideNumber, notes)
       .then(() => this.isLoading = false);
   }
 
@@ -161,7 +178,7 @@ export class PresentationsService {
   clearSlideNotes() {
     this.isLoading = true;
     this.clearSlideNotes_local();
-    this.connection.invoke("ClearSlideNotes")
+    this.connection.invoke("ClearSlideNotes", this.id)
       .then(() => this.isLoading = false);
   }
 
