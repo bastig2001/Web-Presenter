@@ -8,7 +8,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class PresentationsService {
   private connection: HubConnection = null;
-  private id: number = 0;
+  private presentationId: number = 0;
 
   presentation: Presentation;
   isLoading: boolean = false;
@@ -40,7 +40,7 @@ export class PresentationsService {
 
   connect(id: number) {
     this.isLoading = true;
-    this.id = id;
+    this.presentationId = id;
 
     this.getPresentation();
 
@@ -54,7 +54,7 @@ export class PresentationsService {
 
   getPresentation() {
     this.isLoadingPresentation = true;
-    this.http.get<Presentation>(`/controllers/presentations/${this.id}`)
+    this.http.get<Presentation>(`/controllers/presentations/${this.presentationId}`)
       .subscribe(
         presentation => {
           this.presentation = presentation;
@@ -73,7 +73,7 @@ export class PresentationsService {
   setPresentationState(state: PresentationState) {
     this.isLoading = true;
     this.setPresentationState_local(state);
-    this.connection.invoke("SetPresentationState", this.id, state)
+    this.connection.invoke("SetPresentationState", this.presentationId, state)
       .then(() => this.isLoading = false);
   }
 
@@ -84,7 +84,7 @@ export class PresentationsService {
   setTextState(state: TextState) {
     this.isLoading = true;
     this.setTextState_local(state);
-    this.connection.invoke("SetTextState", this.id, state)
+    this.connection.invoke("SetTextState", this.presentationId, state)
       .then(() => this.isLoading = false);
   }
 
@@ -95,7 +95,7 @@ export class PresentationsService {
   setName(name: string) {
     this.isLoading = true;
     this.setName_local(name);
-    this.connection.invoke("SetName", this.id, name)
+    this.connection.invoke("SetName", this.presentationId, name)
       .then(() => this.isLoading = false);
   }
 
@@ -106,7 +106,7 @@ export class PresentationsService {
   setText(text: string) {
     this.isLoading = true;
     this.setText_local(text);
-    this.connection.invoke("SetText", this.id, text)
+    this.connection.invoke("SetText", this.presentationId, text)
       .then(() => this.isLoading = false);
   }
 
@@ -117,7 +117,7 @@ export class PresentationsService {
   setPermanentNotes(notes: string) {
     this.isLoading = true;
     this.setPermanentNotes_local(notes);
-    this.connection.invoke("SetPermanentNotes", this.id, notes)
+    this.connection.invoke("SetPermanentNotes", this.presentationId, notes)
       .then(() => this.isLoading = false);
   }
 
@@ -128,7 +128,7 @@ export class PresentationsService {
   goToSlide(slideNumber: number) {
     this.isLoading = true;
     this.goToSlide_local(slideNumber);
-    this.connection.invoke("GoToSlide", this.id, slideNumber)
+    this.connection.invoke("GoToSlide", this.presentationId, slideNumber)
       .then(() => this.isLoading = false);
   }
 
@@ -141,7 +141,7 @@ export class PresentationsService {
   moveToNextSlide() {
     this.isLoading = true;
     this.moveToNextSlide_local();
-    this.connection.invoke("MoveToNextSlide", this.id)
+    this.connection.invoke("MoveToNextSlide", this.presentationId)
       .then(() => this.isLoading = false);
   }
 
@@ -154,7 +154,7 @@ export class PresentationsService {
   moveToPreviousSlide() {
     this.isLoading = true;
     this.moveToPreviousSlide_local();
-    this.connection.invoke("MoveToPreviousSlide", this.id)
+    this.connection.invoke("MoveToPreviousSlide", this.presentationId)
       .then(() => this.isLoading = false);
   }
 
@@ -167,7 +167,7 @@ export class PresentationsService {
   setSlideNotes(slideNumber: number, notes: string) {
     this.isLoading = true;
     this.setSlideNotes_local(slideNumber, notes);
-    this.connection.invoke("SetSlideNotes", this.id, slideNumber, notes)
+    this.connection.invoke("SetSlideNotes", this.presentationId, slideNumber, notes)
       .then(() => this.isLoading = false);
   }
 
@@ -178,7 +178,7 @@ export class PresentationsService {
   clearSlideNotes() {
     this.isLoading = true;
     this.clearSlideNotes_local();
-    this.connection.invoke("ClearSlideNotes", this.id)
+    this.connection.invoke("ClearSlideNotes", this.presentationId)
       .then(() => this.isLoading = false);
   }
 
@@ -190,7 +190,7 @@ export class PresentationsService {
     this.isLoading = true;
     let formData = new FormData();
     formData.append('imageFile', imageFile);
-    this.http.put("/controllers/presentations/image-presentation", formData)
+    this.http.put(`/controllers/presentations/${this.presentationId}/image-presentation`, formData)
       .subscribe(
         () => this.isLoading = false,
         error => console.error(error)
@@ -199,7 +199,7 @@ export class PresentationsService {
 
   getImagePresentation() {
     this.isLoading = true;
-    this.http.get<string[]>("/controllers/presentations/image-presentation")
+    this.http.get<string[]>(`/controllers/presentations/${this.presentationId}/image-presentation`)
       .subscribe(
         imagePresentation => {
           this.presentation.imagePresentation = imagePresentation;
