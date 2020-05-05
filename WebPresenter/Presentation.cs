@@ -57,12 +57,12 @@ namespace WebPresenter {
         
         public async Task SetImagePresentation(IFormFile multiImageFile) {
             imagePresentation = await Helper.GetImagesFromFile(multiImageFile);
-            SetNumberOfSlide(imagePresentation.Length);
+            SetNumberOfSlides(imagePresentation.Length);
         }
 
         public async Task SetImagePresentation(MemoryStream multiImageStream) {
             imagePresentation = await Helper.GetImagesFromStream(multiImageStream);
-            SetNumberOfSlide(imagePresentation.Length);
+            SetNumberOfSlides(imagePresentation.Length);
         }
         
         public string GetSlideNotes(int slideNumber) {
@@ -77,7 +77,7 @@ namespace WebPresenter {
             slideNotes = new string[numberOfSlides];
         }
 
-        private void SetNumberOfSlide(int newNumberOfSlide) {
+        private void SetNumberOfSlides(int newNumberOfSlide) {
             numberOfSlides = newNumberOfSlide;
             ResizeSlideNotes();
         }

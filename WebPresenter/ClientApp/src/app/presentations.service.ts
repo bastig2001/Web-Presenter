@@ -15,14 +15,7 @@ export class PresentationsService {
   isLoadingPresentation: boolean = false;
   isConnected: boolean = false;
 
-  constructor(private http: HttpClient) {
-    this.connection = new HubConnectionBuilder()
-      .withUrl("/hubs/presentations", {transport: HttpTransportType.WebSockets})
-      .configureLogging(LogLevel.Information)
-      .build();
-
-    this.registerCallbacks();
-  }
+  constructor(private http: HttpClient) {}
 
   private registerCallbacks() {
     this.connection.on("SetPresentationState", this.setPresentationState_local.bind(this));
@@ -40,6 +33,16 @@ export class PresentationsService {
 
   connect(id: number) {
     this.isLoading = true;
+
+    if (id != this.presentationId) {
+      this.connection = new HubConnectionBuilder()
+        .withUrl(`/hubs/presentations?sid=${id}`, {transport: HttpTransportType.WebSockets})
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      this.registerCallbacks();
+    }
+
     this.presentationId = id;
 
     this.getPresentation();

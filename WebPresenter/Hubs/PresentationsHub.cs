@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WebPresenter.Services;
@@ -5,14 +6,27 @@ using WebPresenter.Services;
 namespace WebPresenter.Hubs {
     public class PresentationsHub : Hub {
         private readonly IPresentationsService service;
+        private uint sid;
 
         public PresentationsHub(IPresentationsService presentationsService) {
             service = presentationsService;
         }
 
+        public override Task OnConnectedAsync() {
+            sid = uint.Parse(Context.GetHttpContext().Request.Query["sid"]);
+            Console.WriteLine($"OnConnectedAsync: {sid}");
+            return Groups.AddToGroupAsync(Context.ConnectionId, $"{sid}");
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception) {
+            Console.WriteLine($"OnDisconnectedAsync: {sid}; {exception}");
+            return base.OnDisconnectedAsync(exception);
+        }
+
         public async Task SetPresentationState(uint id, PresentationState presentationState) {
             service.GetPresentation(id).PresentationState = presentationState;
             await Clients.Others.SendAsync("SetPresentationState", service.GetPresentation(id).PresentationState);
+            Console.WriteLine($"PresentationsHub presentation state set: {sid}");
         }
         
         public async Task SetTextState(uint id, TextState textState) {
