@@ -13,9 +13,9 @@ export class PresenterComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    let id: number;
+    let id: string;
     this.route.params.subscribe(params => {
-      id = +params["id"];
+      id = params["id"];
       this.ps.connect(id);
     });
   }

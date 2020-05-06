@@ -5,74 +5,89 @@ using WebPresenter.Services;
 
 namespace WebPresenter.Hubs {
     public class PresentationsHub : Hub {
-        private readonly IPresentationsService service;
-        private uint sid;
+        private readonly IPresentationsService presentations;
+        private readonly GroupManager groups;
 
-        public PresentationsHub(IPresentationsService presentationsService) {
-            service = presentationsService;
+        public PresentationsHub(IPresentationsService presentations, GroupManager groups) {
+            this.presentations = presentations;
+            this.groups = groups;
         }
 
         public override Task OnConnectedAsync() {
-            sid = uint.Parse(Context.GetHttpContext().Request.Query["sid"]);
-            Console.WriteLine($"OnConnectedAsync: {sid}");
-            return Groups.AddToGroupAsync(Context.ConnectionId, $"{sid}");
+            string presentationId = Context.GetHttpContext().Request.Query["presentation-id"];
+            groups.AddConnectionGroup(Context.ConnectionId, presentationId);
+            return Groups.AddToGroupAsync(Context.ConnectionId, $"{presentationId}");
         }
 
         public override Task OnDisconnectedAsync(Exception exception) {
-            Console.WriteLine($"OnDisconnectedAsync: {sid}; {exception}");
-            return base.OnDisconnectedAsync(exception);
+            string presentationId = groups.GetGroupName(Context.ConnectionId);
+            groups.RemoveConnection(Context.ConnectionId);
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, $"{presentationId}");
         }
 
-        public async Task SetPresentationState(uint id, PresentationState presentationState) {
-            service.GetPresentation(id).PresentationState = presentationState;
-            await Clients.Others.SendAsync("SetPresentationState", service.GetPresentation(id).PresentationState);
-            Console.WriteLine($"PresentationsHub presentation state set: {sid}");
+        public async Task SetPresentationState(PresentationState presentationState) {
+            var presentation = GetPresentation();
+            presentation.PresentationState = presentationState;
+            await Clients.Others.SendAsync("SetPresentationState", presentation.PresentationState);
         }
         
-        public async Task SetTextState(uint id, TextState textState) {
-            service.GetPresentation(id).TextState = textState;
-            await Clients.Others.SendAsync("SetTextState", service.GetPresentation(id).TextState);
+        public async Task SetTextState(TextState textState) {
+            var presentation = GetPresentation();
+            presentation.TextState = textState;
+            await Clients.Others.SendAsync("SetTextState", presentation.TextState);
         }
         
-        public async Task SetName(uint id, string name) {
-            service.GetPresentation(id).Name = name;
-            await Clients.Others.SendAsync("SetName", service.GetPresentation(id).Name);
+        public async Task SetName(string name) {
+            var presentation = GetPresentation();
+            presentation.Name = name;
+            await Clients.Others.SendAsync("SetName", presentation.Name);
         }
         
-        public async Task SetText(uint id, string text) {
-            service.GetPresentation(id).Text = text;
-            await Clients.Others.SendAsync("SetText", service.GetPresentation(id).Text);
+        public async Task SetText(string text) {
+            var presentation = GetPresentation();
+            presentation.Text = text;
+            await Clients.Others.SendAsync("SetText", presentation.Text);
         }
         
-        public async Task SetPermanentNotes(uint id, string notes) {
-            service.GetPresentation(id).PermanentNotes = notes;
-            await Clients.Others.SendAsync("SetPermanentNotes", service.GetPresentation(id).PermanentNotes);
+        public async Task SetPermanentNotes(string notes) {
+            var presentation = GetPresentation();
+            presentation.PermanentNotes = notes;
+            await Clients.Others.SendAsync("SetPermanentNotes", presentation.PermanentNotes);
         }
         
-        public async Task GoToSlide(uint id, int slideNumber) {
-            service.GetPresentation(id).CurrentSlideNumber = slideNumber;
-            await Clients.Others.SendAsync("GoToSlide", service.GetPresentation(id).CurrentSlideNumber);
+        public async Task GoToSlide(int slideNumber) {
+            var presentation = GetPresentation();
+            presentation.CurrentSlideNumber = slideNumber;
+            await Clients.Others.SendAsync("GoToSlide", presentation.CurrentSlideNumber);
         }
         
-        public async Task MoveToNextSlide(uint id) {
-            service.GetPresentation(id).CurrentSlideNumber++;
+        public async Task MoveToNextSlide() {
+            var presentation = GetPresentation();
+            presentation.CurrentSlideNumber++;
             await Clients.Others.SendAsync("MoveToNextSlide");
         }
         
-        public async Task MoveToPreviousSlide(uint id) {
-            service.GetPresentation(id).CurrentSlideNumber--;
+        public async Task MoveToPreviousSlide() {
+            var presentation = GetPresentation();
+            presentation.CurrentSlideNumber--;
             await Clients.Others.SendAsync("MoveToPreviousSlide");
         }
         
-        public async Task SetSlideNotes(uint id, int slideNumber, string notes) {
-            service.GetPresentation(id).SetSlideNotes(slideNumber, notes);
+        public async Task SetSlideNotes(int slideNumber, string notes) {
+            var presentation = GetPresentation();
+            presentation.SetSlideNotes(slideNumber, notes);
             await Clients.Others.SendAsync("SetSlideNotes", 
-                slideNumber, service.GetPresentation(id).GetSlideNotes(slideNumber));
+                slideNumber, presentation.GetSlideNotes(slideNumber));
         }
 
-        public async Task ClearSlideNotes(uint id) {
-            service.GetPresentation(id).ClearSlideNotes();
+        public async Task ClearSlideNotes() {
+            var presentation = GetPresentation();
+            presentation.ClearSlideNotes();
             await Clients.Others.SendAsync("ClearSlideNotes");
+        }
+
+        private Presentation GetPresentation() {
+            return presentations.GetPresentation(groups.GetGroupName(Context.ConnectionId));
         }
         
         // public async Task UploadImagePresentation(IAsyncEnumerable<string> stream) {

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,23 +13,23 @@ namespace WebPresenter.Controllers {
     [ApiController]
     [Route("controllers/[controller]")]
     public class PresentationsController : ControllerBase {
-        private readonly IPresentationsService service;
+        private readonly IPresentationsService presentations;
         private readonly IHubContext<PresentationsHub> hubContext;
 
-        public PresentationsController(IPresentationsService service, IHubContext<PresentationsHub> hubContext) {
-            this.service = service;
+        public PresentationsController(IPresentationsService presentations, IHubContext<PresentationsHub> hubContext) {
+            this.presentations = presentations;
             this.hubContext = hubContext;
         }
 
         [HttpGet("{id}")]
-        public Presentation Get(uint id) {
-            return service.GetPresentation(id);
+        public Presentation Get(string id) {
+            return presentations.GetPresentation(id);
         }
 
         [HttpPut("{id}/image-presentation")]
-        public async Task<IActionResult> UploadImagePresentation(uint id, IFormFile imageFile) {
+        public async Task<IActionResult> UploadImagePresentation(string id, IFormFile imageFile) {
             try {
-                await service.GetPresentation(id).SetImagePresentation(imageFile);
+                await presentations.GetPresentation(id).SetImagePresentation(imageFile);
                 await hubContext.Clients.All.SendAsync("SetImagePresentation");
                 return Ok();
             }
@@ -38,8 +40,16 @@ namespace WebPresenter.Controllers {
         }
 
         [HttpGet("{id}/image-presentation")]
-        public IEnumerable<string> GetImagePresentation(uint id) {
-            return service.GetPresentation(id).ImagePresentation;
+        public IEnumerable<string> GetImagePresentation(string id) {
+            return presentations.GetPresentation(id).ImagePresentation;
+        }
+
+        [HttpPost]
+        public ContentResult CreatePresentation() {
+            return new ContentResult {
+                Content = presentations.CreatePresentation(),
+                ContentType = "text/plain"
+            };
         }
     }
 }

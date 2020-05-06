@@ -17,5 +17,9 @@ namespace WebPresenter.Services {
         public string GetGroupName(string connectionId) {
             return connectionGroups.GetValueOrDefault(connectionId);
         }
+
+        public void RemoveConnection(string connectionId) {
+            connectionGroups.Remove(connectionId);
+        }
     }
 }
