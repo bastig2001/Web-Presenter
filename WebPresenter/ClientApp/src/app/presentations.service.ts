@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
 import {Presentation, PresentationState, TextState} from "./presentation";
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -216,7 +216,7 @@ export class PresentationsService {
     this.isLoading = true;
     this.http.post("/controllers/presentations", {})
       .subscribe(
-        id => console.log(id),
+        id => callback(id.toString()),
         error => console.error(error)
       );
   }

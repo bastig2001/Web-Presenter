@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -47,8 +48,8 @@ namespace WebPresenter.Controllers {
         [HttpPost]
         public ContentResult CreatePresentation() {
             return new ContentResult {
-                Content = presentations.CreatePresentation(),
-                ContentType = "text/plain"
+                Content = JsonSerializer.Serialize(presentations.CreatePresentation()),
+                ContentType = "application/json"
             };
         }
     }
