@@ -26,68 +26,92 @@ namespace WebPresenter.Hubs {
         }
 
         public async Task SetPresentationState(PresentationState presentationState) {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.PresentationState = presentationState;
-            await Clients.Others.SendAsync("SetPresentationState", presentation.PresentationState);
+            await Clients.OthersInGroup(group).SendAsync("SetPresentationState", presentation.PresentationState);
         }
         
         public async Task SetTextState(TextState textState) {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.TextState = textState;
-            await Clients.Others.SendAsync("SetTextState", presentation.TextState);
+            await Clients.OthersInGroup(group).SendAsync("SetTextState", presentation.TextState);
         }
         
         public async Task SetName(string name) {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.Name = name;
-            await Clients.Others.SendAsync("SetName", presentation.Name);
+            await Clients.OthersInGroup(group).SendAsync("SetName", presentation.Name);
         }
         
         public async Task SetText(string text) {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.Text = text;
-            await Clients.Others.SendAsync("SetText", presentation.Text);
+            await Clients.OthersInGroup(group).SendAsync("SetText", presentation.Text);
         }
         
         public async Task SetPermanentNotes(string notes) {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.PermanentNotes = notes;
-            await Clients.Others.SendAsync("SetPermanentNotes", presentation.PermanentNotes);
+            await Clients.OthersInGroup(group).SendAsync("SetPermanentNotes", presentation.PermanentNotes);
         }
         
         public async Task GoToSlide(int slideNumber) {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.CurrentSlideNumber = slideNumber;
-            await Clients.Others.SendAsync("GoToSlide", presentation.CurrentSlideNumber);
+            await Clients.OthersInGroup(group).SendAsync("GoToSlide", presentation.CurrentSlideNumber);
         }
         
         public async Task MoveToNextSlide() {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.CurrentSlideNumber++;
-            await Clients.Others.SendAsync("MoveToNextSlide");
+            await Clients.OthersInGroup(group).SendAsync("MoveToNextSlide");
         }
         
         public async Task MoveToPreviousSlide() {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.CurrentSlideNumber--;
-            await Clients.Others.SendAsync("MoveToPreviousSlide");
+            await Clients.OthersInGroup(group).SendAsync("MoveToPreviousSlide");
         }
         
         public async Task SetSlideNotes(int slideNumber, string notes) {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.SetSlideNotes(slideNumber, notes);
-            await Clients.Others.SendAsync("SetSlideNotes", 
+            await Clients.OthersInGroup(group).SendAsync("SetSlideNotes", 
                 slideNumber, presentation.GetSlideNotes(slideNumber));
         }
 
         public async Task ClearSlideNotes() {
-            var presentation = GetPresentation();
+            string group = GetGroup();
+            var presentation = GetPresentation(group);
+            
             presentation.ClearSlideNotes();
-            await Clients.Others.SendAsync("ClearSlideNotes");
+            await Clients.OthersInGroup(group).SendAsync("ClearSlideNotes");
         }
 
-        private Presentation GetPresentation() {
-            return presentations.GetPresentation(groups.GetGroupName(Context.ConnectionId));
+        private string GetGroup() {
+            return groups.GetGroupName(Context.ConnectionId);
+        }
+
+        private Presentation GetPresentation(string groupName) {
+            return presentations.GetPresentation(groupName);
         }
         
         // public async Task UploadImagePresentation(IAsyncEnumerable<string> stream) {
