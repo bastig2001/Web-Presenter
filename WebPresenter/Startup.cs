@@ -23,7 +23,7 @@ namespace WebPresenter {
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
             services.AddSignalR(options => options.EnableDetailedErrors = true);
-
+            
             services.AddSingleton<IPresentationsService, InMemoryPresentationsService>();
             services.AddSingleton<GroupManager>();
         }

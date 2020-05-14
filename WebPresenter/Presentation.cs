@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using WebPresenter.Services;
 
 namespace WebPresenter {
     public enum PresentationState {
@@ -39,7 +41,7 @@ namespace WebPresenter {
 
         private string[] slideNotes;
 
-        public IEnumerable<string> SlideNotes => slideNotes;
+        public string[] SlideNotes => slideNotes;
         
         private string[] imagePresentation;
 
@@ -77,13 +79,42 @@ namespace WebPresenter {
             slideNotes = new string[numberOfSlides];
         }
 
-        private void SetNumberOfSlides(int newNumberOfSlide) {
-            numberOfSlides = newNumberOfSlide;
+        public void SetNumberOfSlides(int newNumberOfSlides) { 
+            numberOfSlides = newNumberOfSlides;
             ResizeSlideNotes();
         }
 
         private void ResizeSlideNotes() {
             Array.Resize(ref slideNotes, numberOfSlides);
+        }
+        
+        public void AddSingleImage(string img)
+        {
+            this.ImagePresentation.Append(img);
+        }
+        public void Save()
+        {
+            using(WebPresenterContext WpContext = DatabasePresentationService.WpContext)
+            {
+                Presentations DbPres = new Presentations();
+                DbPres.Presenterid = 1;
+
+                string[] TmpImgArray = this.ImagePresentation.ToArray();
+                string[] TmpNoteArray = this.SlideNotes.ToArray();
+
+                for (short i = 0; i < this.NumberOfSlides - 1; i++)
+                {
+                    Slides slide = new Slides();
+
+                    slide.Image = TmpImgArray[i];
+                    slide.Notes = TmpNoteArray[i];
+                    slide.Seqnr = i;
+
+                    DbPres.Slides.Add(slide);
+                }
+
+                WpContext.Presentations.Add(DbPres);
+            }
         }
     }
 }
