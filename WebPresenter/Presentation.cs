@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using WebPresenter.Services;
 
 namespace WebPresenter {
     public enum PresentationState {
@@ -22,7 +21,7 @@ namespace WebPresenter {
     public class Presentation {
         public PresentationState PresentationState { get; set; }
         public TextState TextState { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Text { get; set; }
         public string PermanentNotes { get; set; }
         
@@ -41,16 +40,21 @@ namespace WebPresenter {
 
         private string[] slideNotes;
 
-        public string[] SlideNotes => slideNotes;
+        public IEnumerable<string> SlideNotes => slideNotes;
         
         private string[] imagePresentation;
 
         public IEnumerable<string> ImagePresentation => imagePresentation;
+        
+        private string id;
 
-        public Presentation(string name = "New Presentation") {
+        public string Id => id;
+
+        public Presentation(string id, string title = "New Presentation") {
+            this.id = id;
             PresentationState = PresentationState.Text;
             TextState = TextState.Paragraphs;
-            Name = name;
+            Title = title;
             Text = "";
             PermanentNotes = "";
             slideNotes = new []{""};
@@ -66,6 +70,11 @@ namespace WebPresenter {
             imagePresentation = await Helper.GetImagesFromStream(multiImageStream);
             SetNumberOfSlides(imagePresentation.Length);
         }
+
+        public void SetImagePresentation(IEnumerable<string> images) {
+            imagePresentation = images.ToArray();
+            SetNumberOfSlides(imagePresentation.Length);
+        }
         
         public string GetSlideNotes(int slideNumber) {
             return slideNotes[slideNumber];
@@ -75,46 +84,25 @@ namespace WebPresenter {
             slideNotes[slideNumber] = notes;
         }
 
+        public void SetSlideNotes(IEnumerable<string> newSlideNotes) {
+            slideNotes = newSlideNotes.ToArray();
+
+            if (slideNotes.Length < numberOfSlides) {
+                ResizeSlideNotes();
+            }
+        }
+
         public void ClearSlideNotes() {
             slideNotes = new string[numberOfSlides];
         }
 
-        public void SetNumberOfSlides(int newNumberOfSlides) { 
+        private void SetNumberOfSlides(int newNumberOfSlides) { 
             numberOfSlides = newNumberOfSlides;
             ResizeSlideNotes();
         }
 
         private void ResizeSlideNotes() {
             Array.Resize(ref slideNotes, numberOfSlides);
-        }
-        
-        public void AddSingleImage(string img)
-        {
-            this.ImagePresentation.Append(img);
-        }
-        public void Save()
-        {
-            using(WebPresenterContext WpContext = DatabasePresentationService.WpContext)
-            {
-                Presentations DbPres = new Presentations();
-                DbPres.Presenterid = 1;
-
-                string[] TmpImgArray = this.ImagePresentation.ToArray();
-                string[] TmpNoteArray = this.SlideNotes.ToArray();
-
-                for (short i = 0; i < this.NumberOfSlides - 1; i++)
-                {
-                    Slides slide = new Slides();
-
-                    slide.Image = TmpImgArray[i];
-                    slide.Notes = TmpNoteArray[i];
-                    slide.Seqnr = i;
-
-                    DbPres.Slides.Add(slide);
-                }
-
-                WpContext.Presentations.Add(DbPres);
-            }
         }
     }
 }

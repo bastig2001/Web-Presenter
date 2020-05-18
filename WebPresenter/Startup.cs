@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebPresenter.Data;
 using WebPresenter.Hubs;
 using WebPresenter.Services;
 
@@ -23,8 +25,12 @@ namespace WebPresenter {
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
             services.AddSignalR(options => options.EnableDetailedErrors = true);
+
+            services.AddDbContext<PresentationContext>(options => 
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultDB"))
+            );
             
-            services.AddSingleton<IPresentationsService, InMemoryPresentationsService>();
+            services.AddTransient<IPresentationsService, DatabasePresentationsService>();
             services.AddSingleton<GroupManager>();
         }
 

@@ -45,8 +45,8 @@ namespace WebPresenter.Hubs {
             string group = GetGroup();
             var presentation = GetPresentation(group);
             
-            presentation.Name = name;
-            await Clients.OthersInGroup(group).SendAsync("SetName", presentation.Name);
+            presentation.Title = name;
+            await Clients.OthersInGroup(group).SendAsync("SetName", presentation.Title);
         }
         
         public async Task SetText(string text) {

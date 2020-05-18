@@ -1,38 +1,35 @@
 drop table if exists Slides;
 drop table if exists Presentations;
-drop table if exists Presenter;
 
 begin transaction;
 
-create table Presenter(
-    Id       int          generated always as identity not null primary key
-,   Username varchar(256)                               not null
+create table Presentations (
+    Id             varchar(256) not null primary key
+,   Title          varchar(256) not null
+,   Text           text
+,   PermanentNotes text
 );
 
-create table Presentations(
-    Id          int           generated always as identity not null primary key
-,   Title       varchar(256)  not null
-,   Text        text
-,   Notes       text
-,   PresenterId int           not null references Presenter
-);
-
-create table Slides(
-	Id           int      generated always as identity not null primary key
-,	SeqNr        smallint                               not null
-,	Notes        text
-,	Image        text
-,	Presentation int                                    not null references Presentations
+create table Slides (
+    Presentation varchar(256) not null
+,   SlideNr      smallint     not null
+,   Notes        text
+,   Image        text
+,   primary key (Presentation, SlideNr)
 );
 
 commit;
 
-insert into Presenter
-  (Username)
-values
-  ('TestUser')
+begin transaction;
+
+insert into Presentations
+values 
+('1', 'First Presentation', 'Some Text', 'Some Notes')
 ;
 
-select *
-  from Presenter
+insert into Slides
+values
+('1', 0, '', '')
 ;
+
+commit;

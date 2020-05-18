@@ -7,7 +7,7 @@ namespace WebPresenter.Services {
 
         public InMemoryPresentationsService() {
             presentations = new Dictionary<string, Presentation>();
-            presentations.Add("1", new Presentation());
+            presentations.Add("1", new Presentation("1"));
         }
         
         public Presentation GetPresentation(string id) {
@@ -19,7 +19,7 @@ namespace WebPresenter.Services {
             string id;
             do {
                 id = $"{Guid.NewGuid()}";
-                created = presentations.TryAdd(id, new Presentation());
+                created = presentations.TryAdd(id, new Presentation(id));
             } while (!created);
 
             return id;

@@ -17,12 +17,12 @@ export class PresentationControlsComponent implements OnInit {
   constructor(private ps: PresentationsService) { }
 
   ngOnInit() {
-    this.nameInput = this.ps.presentation.name;
+    this.nameInput = this.ps.presentation.title;
     this.slideNumberInput = undefined;
   }
 
   cancelNameInput() {
-    this.nameInput = this.ps.presentation.name;
+    this.nameInput = this.ps.presentation.title;
   }
 
   setName() {

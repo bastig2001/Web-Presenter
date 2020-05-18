@@ -103,7 +103,7 @@ export class PresentationsService {
   }
 
   private setName_local(name: string) {
-    this.presentation.name = name;
+    this.presentation.title = name;
   }
 
   setText(text: string) {
