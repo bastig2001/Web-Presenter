@@ -26,7 +26,7 @@ namespace WebPresenter {
 
             services.AddSignalR(options => options.EnableDetailedErrors = true);
 
-            services.AddDbContext<PresentationContext>(options => 
+            services.AddDbContext<WebPresenterContext>(options => 
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultDB"))
             );
             

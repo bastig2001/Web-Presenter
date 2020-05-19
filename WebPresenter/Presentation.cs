@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using WebPresenter.Models;
 
 namespace WebPresenter {
     public enum PresentationState {
@@ -19,13 +20,14 @@ namespace WebPresenter {
     }
 
     public class Presentation {
+        protected internal PresentationData Data { get; set; }
         public PresentationState PresentationState { get; set; }
         public TextState TextState { get; set; }
-        public string Title { get; set; }
-        public string Text { get; set; }
-        public string PermanentNotes { get; set; }
+        public string Title { get => Data.Title; set => Data.Title = value; }
+        public string Text { get => Data.Text; set => Data.Text = value; }
+        public string PermanentNotes { get => Data.PermanentNotes; set => Data.PermanentNotes = value; }
         
-        private int currentSlideNumber = 0, numberOfSlides = 1;
+        private int currentSlideNumber = 0, numberOfSlides;
 
         public int CurrentSlideNumber {
             get => currentSlideNumber;
@@ -38,62 +40,52 @@ namespace WebPresenter {
 
         public int NumberOfSlides => numberOfSlides;
 
-        private string[] slideNotes;
+        public IEnumerable<string> SlideNotes => Data.SlideNotes;
 
-        public IEnumerable<string> SlideNotes => slideNotes;
-        
-        private string[] imagePresentation;
+        public IEnumerable<string> ImagePresentation => Data.ImagePresentation;
 
-        public IEnumerable<string> ImagePresentation => imagePresentation;
-        
-        private string id;
+        public Presentation(string id, string title = "New Presentation") : this(new PresentationData(id, title)){}
 
-        public string Id => id;
-
-        public Presentation(string id, string title = "New Presentation") {
-            this.id = id;
+        public Presentation(PresentationData data) {
             PresentationState = PresentationState.Text;
             TextState = TextState.Paragraphs;
-            Title = title;
-            Text = "";
-            PermanentNotes = "";
-            slideNotes = new []{""};
-            imagePresentation = new []{""};
+            Data = data;
+            numberOfSlides = Data.ImagePresentation.Length;
         }
         
         public async Task SetImagePresentation(IFormFile multiImageFile) {
-            imagePresentation = await Helper.GetImagesFromFile(multiImageFile);
-            SetNumberOfSlides(imagePresentation.Length);
+            Data.ImagePresentation = await Helper.GetImagesFromFile(multiImageFile);
+            SetNumberOfSlides(Data.ImagePresentation.Length);
         }
 
         public async Task SetImagePresentation(MemoryStream multiImageStream) {
-            imagePresentation = await Helper.GetImagesFromStream(multiImageStream);
-            SetNumberOfSlides(imagePresentation.Length);
+            Data.ImagePresentation = await Helper.GetImagesFromStream(multiImageStream);
+            SetNumberOfSlides(Data.ImagePresentation.Length);
         }
 
         public void SetImagePresentation(IEnumerable<string> images) {
-            imagePresentation = images.ToArray();
-            SetNumberOfSlides(imagePresentation.Length);
+            Data.ImagePresentation = images.ToArray();
+            SetNumberOfSlides(Data.ImagePresentation.Length);
         }
         
         public string GetSlideNotes(int slideNumber) {
-            return slideNotes[slideNumber];
+            return Data.SlideNotes[slideNumber];
         }
 
         public void SetSlideNotes(int slideNumber, string notes) {
-            slideNotes[slideNumber] = notes;
+            Data.SlideNotes[slideNumber] = notes;
         }
 
         public void SetSlideNotes(IEnumerable<string> newSlideNotes) {
-            slideNotes = newSlideNotes.ToArray();
+            Data.SlideNotes = newSlideNotes.ToArray();
 
-            if (slideNotes.Length < numberOfSlides) {
+            if (Data.SlideNotes.Length < numberOfSlides) {
                 ResizeSlideNotes();
             }
         }
 
         public void ClearSlideNotes() {
-            slideNotes = new string[numberOfSlides];
+            Data.SlideNotes = new string[numberOfSlides];
         }
 
         private void SetNumberOfSlides(int newNumberOfSlides) { 
@@ -102,7 +94,7 @@ namespace WebPresenter {
         }
 
         private void ResizeSlideNotes() {
-            Array.Resize(ref slideNotes, numberOfSlides);
+            Data.ResizeSlideNotes(numberOfSlides);
         }
     }
 }

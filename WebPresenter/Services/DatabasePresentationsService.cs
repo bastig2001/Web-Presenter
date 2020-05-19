@@ -1,23 +1,24 @@
 using System;
 using WebPresenter.Data;
+using WebPresenter.Models;
 
 namespace WebPresenter.Services {
     public class DatabasePresentationsService : IPresentationsService {
-        private PresentationContext db;
+        private WebPresenterContext db;
 
-        public DatabasePresentationsService(PresentationContext db) {
+        public DatabasePresentationsService(WebPresenterContext db) {
             this.db = db;
         }
         
         public Presentation GetPresentation(string id) {
-            return db.Presentations.Find(id);
+            return new Presentation(db.Presentations.Find(id));
         }
 
         public string CreatePresentation() {
             string id = $"{Guid.NewGuid()}";
 
             try {
-                db.Presentations.AddAsync(new Presentation("1"));
+                db.Presentations.AddAsync(new PresentationData(id));
                 db.SaveChanges();
             }
             catch (Exception e) {
