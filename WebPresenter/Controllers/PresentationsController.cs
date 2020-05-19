@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,23 +14,23 @@ namespace WebPresenter.Controllers {
     [ApiController]
     [Route("controllers/[controller]")]
     public class PresentationsController : ControllerBase {
-        private readonly IPresentationsService service;
+        private readonly IPresentationsService presentations;
         private readonly IHubContext<PresentationsHub> hubContext;
 
-        public PresentationsController(IPresentationsService service, IHubContext<PresentationsHub> hubContext) {
-            this.service = service;
+        public PresentationsController(IPresentationsService presentations, IHubContext<PresentationsHub> hubContext) {
+            this.presentations = presentations;
             this.hubContext = hubContext;
         }
 
-        [HttpGet]
-        public Presentation Get() {
-            return service.GetPresentation();
+        [HttpGet("{id}")]
+        public Presentation Get(string id) {
+            return presentations.GetPresentation(id);
         }
 
-        [HttpPut("image-presentation")]
-        public async Task<IActionResult> UploadImagePresentation(IFormFile imageFile) {
+        [HttpPut("{id}/image-presentation")]
+        public async Task<IActionResult> UploadImagePresentation(string id, IFormFile imageFile) {
             try {
-                await service.GetPresentation().SetImagePresentation(imageFile);
+                await presentations.GetPresentation(id).SetImagePresentation(imageFile);
                 await hubContext.Clients.All.SendAsync("SetImagePresentation");
                 return Ok();
             }
@@ -37,9 +40,17 @@ namespace WebPresenter.Controllers {
             }
         }
 
-        [HttpGet("image-presentation")]
-        public IEnumerable<string> GetImagePresentation() {
-            return service.GetPresentation().ImagePresentation;
+        [HttpGet("{id}/image-presentation")]
+        public IEnumerable<string> GetImagePresentation(string id) {
+            return presentations.GetPresentation(id).ImagePresentation;
+        }
+
+        [HttpPost]
+        public ContentResult CreatePresentation() {
+            return new ContentResult {
+                Content = JsonSerializer.Serialize(presentations.CreatePresentation()),
+                ContentType = "application/json"
+            };
         }
     }
 }

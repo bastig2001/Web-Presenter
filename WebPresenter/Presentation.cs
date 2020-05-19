@@ -79,8 +79,8 @@ namespace WebPresenter {
             slideNotes = new string[numberOfSlides];
         }
 
-        public void SetNumberOfSlides(int newNumberOfSlides) {
-            numberOfSlides = newNumberOfSlides;
+        public void SetNumberOfSlides(int newNumberOfSlide) {
+            numberOfSlides = newNumberOfSlide;
             ResizeSlideNotes();
         }
 

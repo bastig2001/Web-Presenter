@@ -13,6 +13,11 @@ namespace WebPresenter.Services
             return new Presentation();
         }
 
+        public string CreatePresentation()
+        {
+            return "yes";
+        }
+
         public Presentation GetRecentPresentation()
         {
             return this.ConvertToDisplayType(WpContext.Presentations.Where(p => p.Id == WpContext.Presentations.Max(p => p.Id)).Single());
@@ -23,12 +28,6 @@ namespace WebPresenter.Services
             return this.ConvertToDisplayType(WpContext.Presentations.Where(p => p.Id == Int32.Parse(id)).Single());
         }
 
-        /*
-        public Presentation[] GetAllPresentations()
-        {
-
-        }
-        */
 
         private Presentation ConvertToDisplayType(Presentations presentation)
         {

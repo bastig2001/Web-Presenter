@@ -1,31 +1,21 @@
 import {Injectable} from '@angular/core';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
 import {Presentation, PresentationState, TextState} from "./presentation";
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PresentationsService {
-  private connection: HubConnection;
+  private connection: HubConnection = null;
+  private presentationId: string = "";
 
   presentation: Presentation;
   isLoading: boolean = false;
-  isConnecting: boolean = true;
   isLoadingPresentation: boolean = false;
+  isConnected: boolean = false;
 
-  constructor(private http: HttpClient) {
-    this.connection = new HubConnectionBuilder()
-      .withUrl("/hubs/presentations", {transport: HttpTransportType.WebSockets})
-      .configureLogging(LogLevel.Information)
-      .build();
-
-    this.getPresentation();
-    this.registerCallbacks();
-    this.connection.start()
-      .then(() => this.isConnecting = false)
-      .catch(err => console.error("A connection error has occured.", err));
-  }
+  constructor(private http: HttpClient) {}
 
   private registerCallbacks() {
     this.connection.on("SetPresentationState", this.setPresentationState_local.bind(this));
@@ -41,9 +31,33 @@ export class PresentationsService {
     this.connection.on("SetImagePresentation", this.getImagePresentation.bind(this));
   }
 
+  connect(id: string) {
+    this.isLoading = true;
+
+    if (id != this.presentationId) {
+      this.connection = new HubConnectionBuilder()
+        .withUrl(`/hubs/presentations?presentation-id=${id}`, {transport: HttpTransportType.WebSockets})
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      this.registerCallbacks();
+    }
+
+    this.presentationId = id;
+
+    this.getPresentation();
+
+    this.connection.start()
+      .then(() => {
+        this.isConnected = true;
+        this.isLoading = false;
+      })
+      .catch(err => console.error("A connection error has occured.", err));
+  }
+
   getPresentation() {
     this.isLoadingPresentation = true;
-    this.http.get<Presentation>("/controllers/presentations")
+    this.http.get<Presentation>(`/controllers/presentations/${this.presentationId}`)
       .subscribe(
         presentation => {
           this.presentation = presentation;
@@ -51,6 +65,12 @@ export class PresentationsService {
         },
         error => console.error(error)
       );
+  }
+
+  disconnect() {
+    this.connection.stop()
+      .then(() => this.isConnected = false)
+      .catch(err => console.error("A connection error has occured, while trying to disconnect.", err))
   }
 
   setPresentationState(state: PresentationState) {
@@ -173,7 +193,7 @@ export class PresentationsService {
     this.isLoading = true;
     let formData = new FormData();
     formData.append('imageFile', imageFile);
-    this.http.put("/controllers/presentations/image-presentation", formData)
+    this.http.put(`/controllers/presentations/${this.presentationId}/image-presentation`, formData)
       .subscribe(
         () => this.isLoading = false,
         error => console.error(error)
@@ -182,13 +202,22 @@ export class PresentationsService {
 
   getImagePresentation() {
     this.isLoading = true;
-    this.http.get<string[]>("/controllers/presentations/image-presentation")
+    this.http.get<string[]>(`/controllers/presentations/${this.presentationId}/image-presentation`)
       .subscribe(
         imagePresentation => {
           this.presentation.imagePresentation = imagePresentation;
           this.presentation.numberOfSlides = imagePresentation.length;
         },
-        error => console.log(error)
+        error => console.error(error)
+      );
+  }
+
+  createPresentation(callback: (id: string) => void) {
+    this.isLoading = true;
+    this.http.post("/controllers/presentations", {})
+      .subscribe(
+        id => callback(id.toString()),
+        error => console.error(error)
       );
   }
 

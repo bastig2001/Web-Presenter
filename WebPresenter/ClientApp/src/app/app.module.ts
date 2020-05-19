@@ -30,8 +30,8 @@ import { PresentationControlsComponent } from './presentation-controls/presentat
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'audience', component: AudienceComponent},
-      { path: 'presenter', component: PresenterComponent}
+      { path: 'audience/:id', component: AudienceComponent},
+      { path: 'presenter/:id', component: PresenterComponent}
     ])
   ],
   providers: [],
