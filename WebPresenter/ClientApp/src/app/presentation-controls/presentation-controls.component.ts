@@ -26,7 +26,7 @@ export class PresentationControlsComponent implements OnInit {
   }
 
   setName() {
-    this.ps.setName(this.nameInput);
+    this.ps.setTitle(this.nameInput);
   }
 
   goToSlide() {

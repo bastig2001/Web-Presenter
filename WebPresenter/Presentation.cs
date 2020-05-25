@@ -44,7 +44,8 @@ namespace WebPresenter {
 
         public IEnumerable<string> ImagePresentation => Data.ImagePresentation;
 
-        public Presentation(string id, string title = "New Presentation") : this(new PresentationData(id, title)){}
+        public Presentation(string name, User owner, string title = "New Presentation") : 
+            this(new PresentationData(name, owner, title)) { }
 
         public Presentation(PresentationData data) {
             PresentationState = PresentationState.Text;

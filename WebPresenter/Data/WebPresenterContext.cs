@@ -3,12 +3,14 @@ using WebPresenter.Models;
 
 namespace WebPresenter.Data {
     public class WebPresenterContext : DbContext {
-        public WebPresenterContext(DbContextOptions options): base (options) {}
-
         public DbSet<PresentationData> Presentations { get; set; }
+        public DbSet<User> Users { get; set; }
+        
+        public WebPresenterContext(DbContextOptions options): base (options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            modelBuilder.Entity<PresentationData>().HasKey(presData => presData.Id);
+            modelBuilder.Entity<PresentationData>()
+                .HasKey(pres => new {pres.Name, pres.OwnerName});
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebPresenter.Data;
 using WebPresenter.Hubs;
+using WebPresenter.Models;
 using WebPresenter.Services;
 
 namespace WebPresenter {
@@ -36,6 +37,8 @@ namespace WebPresenter {
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+            InitiateDatabase(app);
+            
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
@@ -70,6 +73,26 @@ namespace WebPresenter {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+        }
+
+        private static void InitiateDatabase(IApplicationBuilder app) {
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            using var dbContext = serviceScope.ServiceProvider.GetRequiredService<WebPresenterContext>();
+            
+            dbContext.Database.EnsureCreated();
+                    
+            // Inserts for testing purposes
+            User anyone = new User("anyone");
+                    
+            if (dbContext.Users.Find("anyone") == null) {
+                dbContext.Users.Add(anyone);
+            }
+
+            if (dbContext.Presentations.Find("1", "anyone") == null) {
+                dbContext.Presentations.Add(new PresentationData("1", anyone, "Test"));
+            }
+
+            dbContext.SaveChanges();
         }
     }
 }

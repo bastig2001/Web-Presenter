@@ -20,7 +20,7 @@ export class PresentationsService {
   private registerCallbacks() {
     this.connection.on("SetPresentationState", this.setPresentationState_local.bind(this));
     this.connection.on("SetTextState", this.setTextState_local.bind(this));
-    this.connection.on("SetName", this.setName_local.bind(this));
+    this.connection.on("SetTitle", this.setTitle_local.bind(this));
     this.connection.on("SetText", this.setText_local.bind(this));
     this.connection.on("SetPermanentNotes", this.setPermanentNotes_local.bind(this));
     this.connection.on("GoToSlide", this.goToSlide_local.bind(this));
@@ -95,14 +95,14 @@ export class PresentationsService {
     this.presentation.textState = state;
   }
 
-  setName(name: string) {
+  setTitle(title: string) {
     this.isLoading = true;
-    this.setName_local(name);
-    this.connection.invoke("SetName", name)
+    this.setTitle_local(title);
+    this.connection.invoke("SetTitle", title)
       .then(() => this.isLoading = false);
   }
 
-  private setName_local(name: string) {
+  private setTitle_local(name: string) {
     this.presentation.title = name;
   }
 

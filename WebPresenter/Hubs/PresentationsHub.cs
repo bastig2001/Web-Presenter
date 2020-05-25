@@ -41,12 +41,12 @@ namespace WebPresenter.Hubs {
             await Clients.OthersInGroup(group).SendAsync("SetTextState", presentation.TextState);
         }
         
-        public async Task SetName(string name) {
+        public async Task SetTitle(string title) {
             string group = GetGroup();
             var presentation = GetPresentation(group);
             
-            presentation.Title = name;
-            await Clients.OthersInGroup(group).SendAsync("SetName", presentation.Title);
+            presentation.Title = title;
+            await Clients.OthersInGroup(group).SendAsync("SetTitle", presentation.Title);
         }
         
         public async Task SetText(string text) {
