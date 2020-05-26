@@ -20,8 +20,9 @@ namespace WebPresenter {
     }
 
     public class Presentation {
-        public readonly ushort Id;
-        protected internal PresentationData Data { get; set; }
+        protected internal PresentationData Data { get; }
+        public string Name => Data.Name;
+        public string OwnerName => Data.OwnerName;
         public PresentationState PresentationState { get; set; }
         public TextState TextState { get; set; }
         public string Title { get => Data.Title; set => Data.Title = value; }
@@ -45,17 +46,16 @@ namespace WebPresenter {
 
         public IEnumerable<string> ImagePresentation => Data.ImagePresentation;
 
-        public Presentation(string name, User owner, ushort id, string title = "New Presentation") : 
-            this(new PresentationData(name, owner.Name, title), id) { }
+        public Presentation(string name, User owner, string title = "New Presentation") : 
+            this(new PresentationData(name, owner.Name, title)) { }
         
-        public Presentation(string name, string ownerName, ushort id, string title = "New Presentation") : 
-            this(new PresentationData(name, ownerName, title), id) { }
+        public Presentation(string name, string ownerName, string title = "New Presentation") : 
+            this(new PresentationData(name, ownerName, title)) { }
 
-        public Presentation(PresentationData data, ushort id) {
+        public Presentation(PresentationData data) {
             PresentationState = PresentationState.Text;
             TextState = TextState.Paragraphs;
             Data = data;
-            Id = id;
             numberOfSlides = Data.ImagePresentation.Length;
         }
         
@@ -104,7 +104,11 @@ namespace WebPresenter {
         }
 
         protected bool Equals(Presentation other) {
-            return Id == other.Id && Equals(Data, other.Data);
+            return currentSlideNumber == other.currentSlideNumber && 
+                   numberOfSlides == other.numberOfSlides && 
+                   Equals(Data, other.Data) && 
+                   PresentationState == other.PresentationState && 
+                   TextState == other.TextState;
         }
 
         public override bool Equals(object obj) {
@@ -115,7 +119,7 @@ namespace WebPresenter {
         }
 
         public override int GetHashCode() {
-            return HashCode.Combine(Id, Data);
+            return HashCode.Combine(currentSlideNumber, numberOfSlides, Data, (int) PresentationState, (int) TextState);
         }
     }
 }
