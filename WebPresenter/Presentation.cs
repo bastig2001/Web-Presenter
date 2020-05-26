@@ -20,6 +20,7 @@ namespace WebPresenter {
     }
 
     public class Presentation {
+        public readonly ushort Id;
         protected internal PresentationData Data { get; set; }
         public PresentationState PresentationState { get; set; }
         public TextState TextState { get; set; }
@@ -44,13 +45,17 @@ namespace WebPresenter {
 
         public IEnumerable<string> ImagePresentation => Data.ImagePresentation;
 
-        public Presentation(string name, User owner, string title = "New Presentation") : 
-            this(new PresentationData(name, owner, title)) { }
+        public Presentation(string name, User owner, ushort id, string title = "New Presentation") : 
+            this(new PresentationData(name, owner.Name, title), id) { }
+        
+        public Presentation(string name, string ownerName, ushort id, string title = "New Presentation") : 
+            this(new PresentationData(name, ownerName, title), id) { }
 
-        public Presentation(PresentationData data) {
+        public Presentation(PresentationData data, ushort id) {
             PresentationState = PresentationState.Text;
             TextState = TextState.Paragraphs;
             Data = data;
+            Id = id;
             numberOfSlides = Data.ImagePresentation.Length;
         }
         
@@ -96,6 +101,21 @@ namespace WebPresenter {
 
         private void ResizeSlideNotes() {
             Data.ResizeSlideNotes(numberOfSlides);
+        }
+
+        protected bool Equals(Presentation other) {
+            return Id == other.Id && Equals(Data, other.Data);
+        }
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Presentation) obj);
+        }
+
+        public override int GetHashCode() {
+            return HashCode.Combine(Id, Data);
         }
     }
 }
