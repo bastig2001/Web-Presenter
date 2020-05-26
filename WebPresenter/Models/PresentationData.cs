@@ -32,6 +32,14 @@ namespace WebPresenter.Models {
             SlideNotes = new[] {""};
             ImagePresentation = new[] {""};
         }
+        
+        public PresentationData(string name, string ownerName, string title = "") {
+            Name = name;
+            OwnerName = ownerName;
+            Title = title;
+            SlideNotes = new[] {""};
+            ImagePresentation = new[] {""};
+        }
 
         public PresentationData() : this("", new User()) { }
 

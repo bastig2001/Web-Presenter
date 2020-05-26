@@ -19,7 +19,7 @@ namespace WebPresenter.Services {
             string id = $"{Guid.NewGuid()}";
 
             try {
-                db.Presentations.AddAsync(new PresentationData(id, anyone));
+                db.Presentations.Add(new PresentationData(id, "anyone"));
                 db.SaveChanges();
             }
             catch (Exception e) {

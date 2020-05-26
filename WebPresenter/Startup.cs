@@ -82,14 +82,12 @@ namespace WebPresenter {
             dbContext.Database.EnsureCreated();
                     
             // Inserts for testing purposes
-            User anyone = new User("anyone");
-                    
             if (dbContext.Users.Find("anyone") == null) {
-                dbContext.Users.Add(anyone);
+                dbContext.Users.Add(new User("anyone"));
             }
 
             if (dbContext.Presentations.Find("1", "anyone") == null) {
-                dbContext.Presentations.Add(new PresentationData("1", anyone, "Test"));
+                dbContext.Presentations.Add(new PresentationData("1", "anyone", "Test"));
             }
 
             dbContext.SaveChanges();
