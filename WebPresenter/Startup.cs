@@ -31,7 +31,8 @@ namespace WebPresenter {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultDB"))
             );
             
-            services.AddTransient<IPresentationsService, PresentationDataService>();
+            services.AddTransient<PresentationDataService>();
+            services.AddSingleton<PresentationsService>();
             services.AddSingleton<GroupManager>();
         }
 

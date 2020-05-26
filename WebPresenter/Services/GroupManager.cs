@@ -8,9 +8,9 @@ namespace WebPresenter.Services {
             connectionGroups = new Dictionary<string, string>();
         }
 
-        public void AddConnectionGroup(string connectionId, string groupName) {
-            if (!connectionGroups.TryAdd(connectionId, groupName)) {
-                connectionGroups[connectionId] = groupName;
+        public void AddConnectionGroup(string connectionId, string presentationId) {
+            if (!connectionGroups.TryAdd(connectionId, presentationId)) {
+                connectionGroups[connectionId] = presentationId;
             }
         }
 

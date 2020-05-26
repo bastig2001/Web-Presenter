@@ -14,11 +14,7 @@ namespace WebPresenter.Services {
         }
 
         public Presentation GetPresentation(string id) {
-            if (!presentations.TryGetValue(id, out var presentation)) {
-                Console.Error.WriteLine($"Tried to get non-existent presentation with id = \"{id}\".");
-            }
-
-            return presentation;
+            return presentations.GetValueOrDefault(id);
         }
 
         public IEnumerable<Presentation> GetPresentations() {

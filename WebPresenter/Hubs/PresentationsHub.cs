@@ -5,10 +5,10 @@ using WebPresenter.Services;
 
 namespace WebPresenter.Hubs {
     public class PresentationsHub : Hub {
-        private readonly IPresentationsService presentations;
+        private readonly PresentationsService presentations;
         private readonly GroupManager groups;
 
-        public PresentationsHub(IPresentationsService presentations, GroupManager groups) {
+        public PresentationsHub(PresentationsService presentations, GroupManager groups) {
             this.presentations = presentations;
             this.groups = groups;
         }
