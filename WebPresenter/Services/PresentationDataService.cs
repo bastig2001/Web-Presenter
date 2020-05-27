@@ -47,10 +47,48 @@ namespace WebPresenter.Services {
 
             try {
                 db.Presentations.Add(presentation);
+                db.SaveChanges();
                 return true;
             }
             catch (Exception e) {
-                Console.Error.WriteLine($"Error while trying to create Presentation {{{presentation}}}. " +
+                Console.Error.WriteLine($"Error while trying to create presentation {{{presentation}}}. " +
+                                        $"\nException: {e}");
+                return false;
+            }
+        }
+
+        public bool Save() {
+            try {
+                db.SaveChanges();
+                return false;
+            }
+            catch (Exception e) {
+                Console.Error.WriteLine($"Error while trying to save changes. " +
+                                        $"\nException: {e}");
+                return false;
+            }
+        }
+
+        public bool RemovePresentation(string name, User owner) {
+            return RemovePresentation(name, owner.Name);
+        }
+
+        public bool RemovePresentation(string name, string ownerName) {
+            return RemovePresentation(db.Presentations.Find(name, ownerName));
+        }
+        
+        public bool RemovePresentation(PresentationData presentation) {
+            if (presentation == null) {
+                return false;
+            }
+            
+            try {
+                db.Presentations.Remove(presentation);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                Console.Error.WriteLine($"Error while trying to remove presentation {{{presentation}}}. " +
                                         $"\nException: {e}");
                 return false;
             }

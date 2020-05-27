@@ -44,7 +44,7 @@ namespace WebPresenter.Services {
         public string StartPresentation(string name, string ownerName) {
             var presentationData = data.GetPresentation(name, ownerName);
 
-            return presentationData == null ? "" : StartPresentation(presentationData);
+            return presentationData == null ? "" : StartPresentation((PresentationData) presentationData.Clone());
         }
         
         public string StartPresentation(PresentationData presentationData) {

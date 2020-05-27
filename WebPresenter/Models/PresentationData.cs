@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WebPresenter.Models {
     
-    public class PresentationData {
+    public class PresentationData : ICloneable {
         private string[] slideNotes;
         
         [StringLength(256), Required] // Key
@@ -57,6 +59,16 @@ namespace WebPresenter.Models {
         public override string ToString() {
             return $"{nameof(Name)}: {Name}, {nameof(OwnerName)}: {OwnerName}, {nameof(Title)}: {Title}, " +
                    $"{nameof(Text)}: {Text}, {nameof(PermanentNotes)}: {PermanentNotes}";
+        }
+
+        public object Clone() {
+            using var stream = new MemoryStream();
+            var formatter = new BinaryFormatter();
+            
+            formatter.Serialize(stream, this);
+            stream.Position = 0;
+
+            return formatter.Deserialize(stream);
         }
     }
 }
