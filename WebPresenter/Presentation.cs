@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using WebPresenter.Services;
+using WebPresenter.Models;
 
 namespace WebPresenter {
     public enum PresentationState {
@@ -20,13 +20,16 @@ namespace WebPresenter {
     }
 
     public class Presentation {
+        protected internal PresentationData Data { get; }
+        public string Name => Data.Name;
+        public string OwnerName => Data.OwnerName;
         public PresentationState PresentationState { get; set; }
         public TextState TextState { get; set; }
-        public string Name { get; set; }
-        public string Text { get; set; }
-        public string PermanentNotes { get; set; }
+        public string Title { get => Data.Title; set => Data.Title = value; }
+        public string Text { get => Data.Text; set => Data.Text = value; }
+        public string PermanentNotes { get => Data.PermanentNotes; set => Data.PermanentNotes = value; }
         
-        private int currentSlideNumber = 0, numberOfSlides = 1;
+        private int currentSlideNumber = 0, numberOfSlides;
 
         public int CurrentSlideNumber {
             get => currentSlideNumber;
@@ -39,82 +42,84 @@ namespace WebPresenter {
 
         public int NumberOfSlides => numberOfSlides;
 
-        private string[] slideNotes;
+        public IEnumerable<string> SlideNotes => Data.SlideNotes;
 
-        public string[] SlideNotes => slideNotes;
+        public IEnumerable<string> ImagePresentation => Data.ImagePresentation;
+
+        public Presentation(string name, User owner, string title = "New Presentation") : 
+            this(new PresentationData(name, owner.Name, title)) { }
         
-        private string[] imagePresentation;
+        public Presentation(string name, string ownerName, string title = "New Presentation") : 
+            this(new PresentationData(name, ownerName, title)) { }
 
-        public IEnumerable<string> ImagePresentation => imagePresentation;
-
-        public Presentation(string name = "New Presentation") {
+        public Presentation(PresentationData data) {
             PresentationState = PresentationState.Text;
             TextState = TextState.Paragraphs;
-            Name = name;
-            Text = "";
-            PermanentNotes = "";
-            slideNotes = new []{""};
-            imagePresentation = new []{""};
+            Data = data;
+            numberOfSlides = Data.ImagePresentation.Length;
         }
         
         public async Task SetImagePresentation(IFormFile multiImageFile) {
-            imagePresentation = await Helper.GetImagesFromFile(multiImageFile);
-            SetNumberOfSlides(imagePresentation.Length);
+            Data.ImagePresentation = await Helper.GetImagesFromFile(multiImageFile);
+            SetNumberOfSlides(Data.ImagePresentation.Length);
         }
 
         public async Task SetImagePresentation(MemoryStream multiImageStream) {
-            imagePresentation = await Helper.GetImagesFromStream(multiImageStream);
-            SetNumberOfSlides(imagePresentation.Length);
+            Data.ImagePresentation = await Helper.GetImagesFromStream(multiImageStream);
+            SetNumberOfSlides(Data.ImagePresentation.Length);
+        }
+
+        public void SetImagePresentation(IEnumerable<string> images) {
+            Data.ImagePresentation = images.ToArray();
+            SetNumberOfSlides(Data.ImagePresentation.Length);
         }
         
         public string GetSlideNotes(int slideNumber) {
-            return slideNotes[slideNumber];
+            return Data.SlideNotes[slideNumber];
         }
 
         public void SetSlideNotes(int slideNumber, string notes) {
-            slideNotes[slideNumber] = notes;
+            Data.SlideNotes[slideNumber] = notes;
+        }
+
+        public void SetSlideNotes(IEnumerable<string> newSlideNotes) {
+            Data.SlideNotes = newSlideNotes.ToArray();
+
+            if (Data.SlideNotes.Length < numberOfSlides) {
+                ResizeSlideNotes();
+            }
         }
 
         public void ClearSlideNotes() {
-            slideNotes = new string[numberOfSlides];
+            Data.SlideNotes = new string[numberOfSlides];
         }
 
-        public void SetNumberOfSlides(int newNumberOfSlide) {
-            numberOfSlides = newNumberOfSlide;
+        private void SetNumberOfSlides(int newNumberOfSlides) { 
+            numberOfSlides = newNumberOfSlides;
             ResizeSlideNotes();
         }
 
         private void ResizeSlideNotes() {
-            Array.Resize(ref slideNotes, numberOfSlides);
+            Data.ResizeSlideNotes(numberOfSlides);
         }
-        
-        public void AddSingleImage(string img)
-        {
-            this.ImagePresentation.Append(img);
+
+        protected bool Equals(Presentation other) {
+            return currentSlideNumber == other.currentSlideNumber && 
+                   numberOfSlides == other.numberOfSlides && 
+                   Equals(Data, other.Data) && 
+                   PresentationState == other.PresentationState && 
+                   TextState == other.TextState;
         }
-        public void Save()
-        {
-            using(WebPresenterContext WpContext = DatabasePresentationService.WpContext)
-            {
-                Presentations DbPres = new Presentations();
-                DbPres.Presenterid = 1;
 
-                string[] TmpImgArray = this.ImagePresentation.ToArray();
-                string[] TmpNoteArray = this.SlideNotes.ToArray();
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Presentation) obj);
+        }
 
-                for (short i = 0; i < this.NumberOfSlides - 1; i++)
-                {
-                    Slides slide = new Slides();
-
-                    slide.Image = TmpImgArray[i];
-                    slide.Notes = TmpNoteArray[i];
-                    slide.Seqnr = i;
-
-                    DbPres.Slides.Add(slide);
-                }
-
-                WpContext.Presentations.Add(DbPres);
-            }
+        public override int GetHashCode() {
+            return HashCode.Combine(currentSlideNumber, numberOfSlides, Data, (int) PresentationState, (int) TextState);
         }
     }
 }

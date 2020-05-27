@@ -5,10 +5,10 @@ using WebPresenter.Services;
 
 namespace WebPresenter.Hubs {
     public class PresentationsHub : Hub {
-        private readonly IPresentationsService presentations;
+        private readonly PresentationsService presentations;
         private readonly GroupManager groups;
 
-        public PresentationsHub(IPresentationsService presentations, GroupManager groups) {
+        public PresentationsHub(PresentationsService presentations, GroupManager groups) {
             this.presentations = presentations;
             this.groups = groups;
         }
@@ -41,12 +41,12 @@ namespace WebPresenter.Hubs {
             await Clients.OthersInGroup(group).SendAsync("SetTextState", presentation.TextState);
         }
         
-        public async Task SetName(string name) {
+        public async Task SetTitle(string title) {
             string group = GetGroup();
             var presentation = GetPresentation(group);
             
-            presentation.Name = name;
-            await Clients.OthersInGroup(group).SendAsync("SetName", presentation.Name);
+            presentation.Title = title;
+            await Clients.OthersInGroup(group).SendAsync("SetTitle", presentation.Title);
         }
         
         public async Task SetText(string text) {

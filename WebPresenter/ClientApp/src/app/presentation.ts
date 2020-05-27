@@ -13,7 +13,7 @@ export enum TextState {
 export interface Presentation {
   presentationState: PresentationState,
   textState: TextState,
-  name: string,
+  title: string,
   text: string,
   currentSlideNumber: number,
   numberOfSlides: number,
