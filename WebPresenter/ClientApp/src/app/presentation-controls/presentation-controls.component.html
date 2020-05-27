@@ -1,99 +1,135 @@
-<div class="presentation-menu">
-  <form class="row pt-4" name="TypeForm">
-    <div id="presentation-state-radio-group" class="col">
-      <h4>Select type:</h4>
-      <div class="custom-control-inline custom-radio custom-control">
-        <input type="radio" [value]="PresentationState.Text" name="presentation-state"
-               [checked]="ps.presentation.presentationState == PresentationState.Text"
-               (change)="ps.setPresentationState(PresentationState.Text)"
-               class="custom-control-input"
-               id="TypeRadio1"/>
-        <label class="custom-control-label" for="TypeRadio1">
-          Text
-        </label>
+<div class="presentation-menu pt-4">
+  <hr />
+  <div class="row">
+    <form class="col-3">
+      <div id="presentation-state-radio-group">
+        <h4>Select type:</h4>
+        <div class="custom-control-inline custom-radio custom-control">
+          <input type="radio" [value]="PresentationState.Text" name="presentation-state"
+                 [checked]="ps.presentation.presentationState == PresentationState.Text"
+                 (change)="ps.setPresentationState(PresentationState.Text)"
+                 class="custom-control-input"
+                 id="TypeRadio1" />
+          <label class="custom-control-label" for="TypeRadio1">
+            Text
+          </label>
+        </div>
+        <div class="custom-control custom-control-inline custom-radio">
+          <input type="radio" [value]="PresentationState.Slides" name="presentation-state"
+                 [checked]="ps.presentation.presentationState == PresentationState.Slides"
+                 (change)="ps.setPresentationState(PresentationState.Slides)"
+                 class="custom-control-input"
+                 id="TypeRadio2" />
+          <label class="custom-control-label" for="TypeRadio2">
+            Slides
+          </label>
+        </div>
       </div>
-      <div class="custom-control custom-control-inline custom-radio">
-        <input type="radio" [value]="PresentationState.Slides" name="presentation-state"
-               [checked]="ps.presentation.presentationState == PresentationState.Slides"
-               (change)="ps.setPresentationState(PresentationState.Slides)"
-               class="custom-control-input"
-               id="TypeRadio2"/>
-        <label class="custom-control-label" for="TypeRadio2">
-          Slides
-        </label>
-      </div>
+    </form>
+    <div class="field col-4" id="name-field">
+      <h4>Set the title:</h4>
+      <form class="form-inline">
+        <div class="form-group">
+          <input type="text" name="TitleInput" [(ngModel)]="nameInput" class="form-control" />
+          <button (click)="setName()" class="form-control">Set Name</button>
+          <!--<button (click)="cancelNameInput()">Cancel</button>-->
+        </div>
+      </form>
     </div>
-    <div class="field col" id="name-field">
-      <label>
-        <span>Name:</span>
-        <input type="text" name="NameInput" [(ngModel)]="nameInput" />
-        <button (click)="setName()">Set Name</button>
-        <button (click)="cancelNameInput()">Cancel</button>
-      </label>
-    </div>
-  </form>
-  <textarea id="permanent-notes" placeholder="Permanent Notes..."
-            [ngModel]="ps.presentation.permanentNotes"
-            (ngModelChange)="ps.setPermanentNotes($event)"
-  ></textarea>
-
-  <div id="special-controls" [ngSwitch]="ps.presentation.presentationState">
-    <div id="text-controls" *ngSwitchCase="PresentationState.Text">
-      <div class="radio-group" id="text-state-radio-group">
-        <label>
-          <input type="radio" [value]="TextState.Paragraphs" name="text-state"
-                 [checked]="ps.presentation.textState == TextState.Paragraphs"
-                 (change)="ps.setTextState(TextState.Paragraphs)"
-          />
-          <span>Paragraphs</span>
-        </label>
-        <label>
-          <input type="radio" [value]="TextState.Monospace" name="state-state"
-                 [checked]="ps.presentation.textState == TextState.Monospace"
-                 (change)="ps.setTextState(TextState.Monospace)"
-          />
-          <span>Monospace</span>
-        </label>
-        <label>
-          <input type="radio" [value]="TextState.Markdown" name="text-state"
-                 [checked]="ps.presentation.textState == TextState.Markdown"
-                 (change)="ps.setTextState(TextState.Markdown)"
-          />
-          <span>Markdown</span>
-        </label>
-        <label>
-          <input type="radio" [value]="TextState.Html" name="state-state"
-                 [checked]="ps.presentation.textState == TextState.Html"
-                 (change)="ps.setTextState(TextState.Html)"
-          />
-          <span>Html</span>
-        </label>
-      </div>
-      <textarea id="text" placeholder="Text..."
-                [ngModel]="ps.presentation.text"
-                (ngModelChange)="ps.setText($event)"
-      ></textarea>
-    </div>
-    <div id="slide-controls" *ngSwitchCase="PresentationState.Slides">
-      <div class="field" id="move-slides-field">
-        <button (click)="ps.moveToPreviousSlide()">&lt;</button>
-        <button (click)="ps.moveToNextSlide()">&gt;</button>
-      </div>
-      <div class="field" id="go-to-slide-field">
-        <input [(ngModel)]="slideNumberInput" min="1" [max]="ps.presentation.numberOfSlides" step="1"/>
-        <button (click)="goToSlide()">Go To Slide</button>
-      </div>
-      <div class="field" id="slide-notes-field">
-        <textarea id="slide-notes" placeholder="Slide Notes..."
-                  [ngModel]="ps.presentation.slideNotes[this.ps.presentation.currentSlideNumber]"
-                  (ngModelChange)="ps.setSlideNotes(this.ps.presentation.currentSlideNumber, $event)"
-        ></textarea>
-        <button (click)="ps.clearSlideNotes()">Clear All Slide Notes</button>
-      </div>
-      <div class="field" id="file-upload-field">
-        <input type="file" placeholder="image presentation..." (change)="setFileInput($event.target.files)"/>
-        <button (click)="ps.uploadImagePresentation(fileInput)">Upload</button>
-      </div>
+    <div class="col-5">
+      <form>
+        <h4>Enter Notes for the entire Presentaiton:</h4>
+        <textarea id="permanent-notes" placeholder="Permanent Notes..."
+                  class="form-control"
+                  [ngModel]="ps.presentation.permanentNotes"
+                  (ngModelChange)="ps.setPermanentNotes($event)"></textarea>
+      </form>
     </div>
   </div>
+  <hr />
+  <div class="row pt-4">
+    <h2>Create your Presentaiton:</h2>
+  </div>
+    <div id="special-controls" [ngSwitch]="ps.presentation.presentationState">
+      <div id="text-controls" *ngSwitchCase="PresentationState.Text">
+        <form>
+          <div id="text-state-radio-group" class="row py-2">
+            <div class="custom-control-inline custom-radio custom-control">
+              <input type="radio" [value]="TextState.Paragraphs" name="text-state"
+                     [checked]="ps.presentation.textState == TextState.Paragraphs"
+                     (change)="ps.setTextState(TextState.Paragraphs)"
+                     class="custom-control-input"
+                     id="TextStateRadio1"/>
+              <label class="custom-control-label" for="TextStateRadio1">
+                Paragraphs
+              </label>
+            </div>
+            <div class="custom-control-inline custom-radio custom-control">
+              <input type="radio" [value]="TextState.Monospace" name="state-state"
+                     [checked]="ps.presentation.textState == TextState.Monospace"
+                     (change)="ps.setTextState(TextState.Monospace)"
+                     class="custom-control-input"
+                     id="TextStateRadio2"/>
+              <label class="custom-control-label" for="TextStateRadio2">Monospace</label>
+            </div>
+            <div class="custom-control-inline custom-radio custom-control">
+              <input type="radio" [value]="TextState.Markdown" name="text-state"
+                     [checked]="ps.presentation.textState == TextState.Markdown"
+                     (change)="ps.setTextState(TextState.Markdown)"
+                     class="custom-control-input"
+                     id="TextStateRadio3"/>
+              <label class="custom-control-label" for="TextStateRadio3">Markdown</label>
+            </div>
+            <div class="custom-control-inline custom-radio custom-control">
+              <input type="radio" [value]="TextState.Html" name="state-state"
+                     [checked]="ps.presentation.textState == TextState.Html"
+                     (change)="ps.setTextState(TextState.Html)"
+                     class="custom-control-input"
+                     id="TextStateRadio4"/>
+              <label class="custom-control-label" for="TextStateRadio4">Html</label>
+            </div>
+          </div>
+          <div class="row pt-4">
+            <div class="form-group col">
+              <h4>Enter your Presentation here:</h4>
+              <textarea id="text" placeholder="Text..."
+                        [ngModel]="ps.presentation.text"
+                        (ngModelChange)="ps.setText($event)"
+                        class="form-control"
+                        name="textArea"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="slide-controls" *ngSwitchCase="PresentationState.Slides">
+        <div class="row">
+          <div class="col" id="file-upload-field">
+            <form>
+            <h5>Upload a Picture as Slide</h5>
+              <div class="custom-file">
+                <input id="FileUpload" type="file" class="custom-file-input" placeholder="image presentation..." (change)="setFileInput($event.target.files)" />
+                <label class="custom-file-label" for="FileUpload">Select a file</label>
+              </div>
+              <button class="btn btn-secondary" (click)="ps.uploadImagePresentation(fileInput)">Upload</button>
+            </form>
+          </div>
+          <div class="col" id="slide-notes-field">
+            <textarea id="slide-notes" placeholder="Slide Notes..."
+                      [ngModel]="ps.presentation.slideNotes[this.ps.presentation.currentSlideNumber]"
+                      (ngModelChange)="ps.setSlideNotes(this.ps.presentation.currentSlideNumber, $event)"></textarea>
+            <button class="btn btn-secondary" (click)="ps.clearSlideNotes()">Clear All Slide Notes</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col" id="move-slides-field">
+            <button (click)="ps.moveToPreviousSlide()">&lt;</button>
+            <button (click)="ps.moveToNextSlide()">&gt;</button>
+          </div>
+          <div class="col" id="go-to-slide-field">
+            <input [(ngModel)]="slideNumberInput" min="1" [max]="ps.presentation.numberOfSlides" step="1" />
+            <button (click)="goToSlide()">Go To Slide</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>

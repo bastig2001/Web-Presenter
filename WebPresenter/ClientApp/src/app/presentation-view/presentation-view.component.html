@@ -1,21 +1,24 @@
-<div class="presentation-view" [ngSwitch]="ps.presentation.presentationState">
+<div class="presentation-view pt-4" [ngSwitch]="ps.presentation.presentationState">
+
   <div class="slides" *ngSwitchCase="PresentationState.Slides">
+    <h3>Your Presentation as Slides:</h3>
     <img src="data:image/png;base64,{{ps.presentation.imagePresentation[ps.presentation.currentSlideNumber]}}"
          alt="There is a problem in showing this slide."
     />
   </div>
   <div class="text" *ngSwitchCase="PresentationState.Text" [ngSwitch]="ps.presentation.textState">
-    <div *ngSwitchCase="TextState.Html"
-         [innerHTML]="sanitizer.sanitize(SecurityContext.HTML, ps.presentation.text)"
-    ></div>
-    <div *ngSwitchCase="TextState.Markdown"
-         [innerHTML]="sanitizer.sanitize(SecurityContext.HTML, remarker.render(ps.presentation.text))"
-    ></div>
-    <samp *ngSwitchCase="TextState.Monospace" style="white-space: pre-line;">
-      {{ps.presentation.text}}
-    </samp>
-    <p *ngSwitchCase="TextState.Paragraphs" style="white-space: pre-line;">
-      {{ps.presentation.text}}
-    </p>
+    <h3>Your Presentation as Text:</h3>
+    <div class="border border-dark rounded">
+      <div *ngSwitchCase="TextState.Html"
+           [innerHTML]="sanitizer.sanitize(SecurityContext.HTML, ps.presentation.text)"></div>
+      <div *ngSwitchCase="TextState.Markdown"
+           [innerHTML]="sanitizer.sanitize(SecurityContext.HTML, remarker.render(ps.presentation.text))"></div>
+      <samp *ngSwitchCase="TextState.Monospace" style="white-space: pre-line;">
+        {{ps.presentation.text}}
+      </samp>
+      <p *ngSwitchCase="TextState.Paragraphs" style="white-space: pre-line;">
+        {{ps.presentation.text}}
+      </p>
+    </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebPresenter.Hubs;
 using WebPresenter.Models;
 using WebPresenter.Services;
 
