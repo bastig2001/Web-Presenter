@@ -1,9 +1,28 @@
+
 <h1>Welcome to Web-Presenter!</h1>
 <p>This is an app for holding presentations online.</p>
 <p>We use:</p>
 <ul>
-  <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for server-side code</li>
-  <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-  <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
+	<li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for server-side code</li>
+	<li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
+	<li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
 </ul>
-<button (click)="createPresentation()" class="btn-primary">Create Presentation</button>
+
+<div class="row">
+  <div class="card-columns col">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Presentations</h4>
+        <p class="card-text">Create fast and easy presentations to share with your colleagues / teachers / students.</p>
+        <button (click)="createPresentation()" class="btn-primary btn">Create Presentation</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Audience</h4>
+        <p class="card-text">Join Presentations and listen to what your colleagues / teachers / students have to say.</p>
+        <button (click)="createPresentation()" class="btn-primary btn">Join Presentation</button>
+      </div>
+    </div>
+  </div>
+ </div>

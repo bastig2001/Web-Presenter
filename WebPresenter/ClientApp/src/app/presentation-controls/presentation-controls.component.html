@@ -1,28 +1,37 @@
 <div class="presentation-menu">
-  <div class="radio-group" id="presentation-state-radio-group">
-    <label>
-      <input type="radio" [value]="PresentationState.Text" name="presentation-state"
-             [checked]="ps.presentation.presentationState == PresentationState.Text"
-             (change)="ps.setPresentationState(PresentationState.Text)"
-      />
-      <span>Text</span>
-    </label>
-    <label>
-      <input type="radio" [value]="PresentationState.Slides" name="presentation-state"
-             [checked]="ps.presentation.presentationState == PresentationState.Slides"
-             (change)="ps.setPresentationState(PresentationState.Slides)"
-      />
-      <span>Slides</span>
-    </label>
-  </div>
-  <div class="field" id="name-field">
-    <label>
-      <span>Name:</span>
-      <input type="text" [(ngModel)]="nameInput"/>
-      <button (click)="setName()">Set Name</button>
-      <button (click)="cancelNameInput()">Cancel</button>
-    </label>
-  </div>
+  <form class="row pt-4" name="TypeForm">
+    <div id="presentation-state-radio-group" class="col">
+      <h4>Select type:</h4>
+      <div class="custom-control-inline custom-radio custom-control">
+        <input type="radio" [value]="PresentationState.Text" name="presentation-state"
+               [checked]="ps.presentation.presentationState == PresentationState.Text"
+               (change)="ps.setPresentationState(PresentationState.Text)"
+               class="custom-control-input"
+               id="TypeRadio1"/>
+        <label class="custom-control-label" for="TypeRadio1">
+          Text
+        </label>
+      </div>
+      <div class="custom-control custom-control-inline custom-radio">
+        <input type="radio" [value]="PresentationState.Slides" name="presentation-state"
+               [checked]="ps.presentation.presentationState == PresentationState.Slides"
+               (change)="ps.setPresentationState(PresentationState.Slides)"
+               class="custom-control-input"
+               id="TypeRadio2"/>
+        <label class="custom-control-label" for="TypeRadio2">
+          Slides
+        </label>
+      </div>
+    </div>
+    <div class="field col" id="name-field">
+      <label>
+        <span>Name:</span>
+        <input type="text" name="NameInput" [(ngModel)]="nameInput" />
+        <button (click)="setName()">Set Name</button>
+        <button (click)="cancelNameInput()">Cancel</button>
+      </label>
+    </div>
+  </form>
   <textarea id="permanent-notes" placeholder="Permanent Notes..."
             [ngModel]="ps.presentation.permanentNotes"
             (ngModelChange)="ps.setPermanentNotes($event)"
