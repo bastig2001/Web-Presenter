@@ -16,10 +16,6 @@ namespace WebPresenter.Services {
             return db.Presentations.Find(name, ownerName);
         }
 
-        public PresentationData GetPresentation(string name, User owner) {
-            return GetPresentation(name, owner.Name);
-        }
-
         public IEnumerable<PresentationData> GetPresentations() {
             return db.Presentations;
         }
@@ -28,16 +24,8 @@ namespace WebPresenter.Services {
             return db.Presentations.Where(pres => pres.OwnerName == ownerName);
         }
 
-        public IEnumerable<PresentationData> GetPresentations(User owner) {
-            return GetPresentations(owner.Name);
-        }
-
         public bool CreatePresentation(string name, string ownerName, string title = "New Presentation") {
             return AddPresentation(new PresentationData(name, ownerName, title));
-        }
-
-        public bool CreatePresentation(string name, User owner, string title = "New Presentation") {
-            return CreatePresentation(name, owner.Name, title);
         }
 
         public bool AddPresentation(PresentationData presentation) {
@@ -67,10 +55,6 @@ namespace WebPresenter.Services {
                                         $"\nException: {e}");
                 return false;
             }
-        }
-
-        public bool RemovePresentation(string name, User owner) {
-            return RemovePresentation(name, owner.Name);
         }
 
         public bool RemovePresentation(string name, string ownerName) {
