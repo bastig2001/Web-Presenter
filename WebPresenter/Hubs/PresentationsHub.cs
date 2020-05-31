@@ -8,6 +8,9 @@ namespace WebPresenter.Hubs {
         private readonly PresentationsService presentations;
         private readonly GroupManager groups;
 
+        private string groupName;
+        private Presentation presentation;
+
         public PresentationsHub(PresentationsService presentations, GroupManager groups) {
             this.presentations = presentations;
             this.groups = groups;
@@ -18,7 +21,7 @@ namespace WebPresenter.Hubs {
             groups.AddConnectionGroup(Context.ConnectionId, presentationId);
             return Groups.AddToGroupAsync(Context.ConnectionId, $"{presentationId}");
         }
-
+        
         public override Task OnDisconnectedAsync(Exception exception) {
             string presentationId = groups.GetGroupName(Context.ConnectionId);
             groups.RemoveConnection(Context.ConnectionId);
@@ -26,92 +29,74 @@ namespace WebPresenter.Hubs {
         }
 
         public async Task SetPresentationState(PresentationState presentationState) {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.PresentationState = presentationState;
-            await Clients.OthersInGroup(group).SendAsync("SetPresentationState", presentation.PresentationState);
+            await Clients.OthersInGroup(groupName).SendAsync("SetPresentationState", presentation.PresentationState);
         }
         
         public async Task SetTextState(TextState textState) {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.TextState = textState;
-            await Clients.OthersInGroup(group).SendAsync("SetTextState", presentation.TextState);
+            await Clients.OthersInGroup(groupName).SendAsync("SetTextState", presentation.TextState);
         }
         
         public async Task SetTitle(string title) {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.Title = title;
-            await Clients.OthersInGroup(group).SendAsync("SetTitle", presentation.Title);
+            await Clients.OthersInGroup(groupName).SendAsync("SetTitle", presentation.Title);
         }
         
         public async Task SetText(string text) {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.Text = text;
-            await Clients.OthersInGroup(group).SendAsync("SetText", presentation.Text);
+            await Clients.OthersInGroup(groupName).SendAsync("SetText", presentation.Text);
         }
         
         public async Task SetPermanentNotes(string notes) {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.PermanentNotes = notes;
-            await Clients.OthersInGroup(group).SendAsync("SetPermanentNotes", presentation.PermanentNotes);
+            await Clients.OthersInGroup(groupName).SendAsync("SetPermanentNotes", presentation.PermanentNotes);
         }
         
         public async Task GoToSlide(int slideNumber) {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.CurrentSlideNumber = slideNumber;
-            await Clients.OthersInGroup(group).SendAsync("GoToSlide", presentation.CurrentSlideNumber);
+            await Clients.OthersInGroup(groupName).SendAsync("GoToSlide", presentation.CurrentSlideNumber);
         }
         
         public async Task MoveToNextSlide() {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.CurrentSlideNumber++;
-            await Clients.OthersInGroup(group).SendAsync("MoveToNextSlide");
+            await Clients.OthersInGroup(groupName).SendAsync("MoveToNextSlide");
         }
         
         public async Task MoveToPreviousSlide() {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.CurrentSlideNumber--;
-            await Clients.OthersInGroup(group).SendAsync("MoveToPreviousSlide");
+            await Clients.OthersInGroup(groupName).SendAsync("MoveToPreviousSlide");
         }
         
         public async Task SetSlideNotes(int slideNumber, string notes) {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.SetSlideNotes(slideNumber, notes);
-            await Clients.OthersInGroup(group).SendAsync("SetSlideNotes", 
+            await Clients.OthersInGroup(groupName).SendAsync("SetSlideNotes", 
                 slideNumber, presentation.GetSlideNotes(slideNumber));
         }
 
         public async Task ClearSlideNotes() {
-            string group = GetGroup();
-            var presentation = GetPresentation(group);
-            
+            SetContextVariables();
             presentation.ClearSlideNotes();
-            await Clients.OthersInGroup(group).SendAsync("ClearSlideNotes");
+            await Clients.OthersInGroup(groupName).SendAsync("ClearSlideNotes");
         }
 
-        private string GetGroup() {
-            return groups.GetGroupName(Context.ConnectionId);
+        public async Task ReloadImagePresentation() {
+            SetContextVariables();
+            await Clients.OthersInGroup(groupName).SendAsync("ReloadImagePresentation");
         }
 
-        private Presentation GetPresentation(string groupName) {
-            return presentations.GetPresentation(groupName);
+        private void SetContextVariables() {
+            groupName = groups.GetGroupName(Context.ConnectionId);
+            presentation = presentations.GetPresentation(groupName);
         }
         
         // public async Task UploadImagePresentation(IAsyncEnumerable<string> stream) {
