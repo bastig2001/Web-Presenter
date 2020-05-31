@@ -6,6 +6,11 @@ namespace WebPresenter.Services {
 
         public IEnumerable<T> Values => dict.Values;
 
+        public T this[string key] {
+            get => dict[key];
+            set => dict[key] = value;
+        }
+
         public T GetValueOrDefault(string key) {
             return dict.GetValueOrDefault(key);
         }
@@ -16,6 +21,10 @@ namespace WebPresenter.Services {
 
         public void Add(string key, T value) {
             dict.Add(key, value);
+        }
+
+        public bool TryAdd(string key, T value) {
+            return dict.TryAdd(key, value);
         }
 
         public bool Remove(string key) {
