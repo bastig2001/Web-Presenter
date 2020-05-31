@@ -6,11 +6,11 @@ using WebPresenter.Models;
 namespace WebPresenter.Services {
     public class PresentationsService {
         private readonly PresentationDataService data;
-        private readonly Dictionary<string, Presentation> presentations;
+        private readonly StorageService<Presentation> presentations;
         
-        public PresentationsService(PresentationDataService data) {
+        public PresentationsService(PresentationDataService data, StorageService<Presentation> presentations) {
             this.data = data;
-            presentations = new Dictionary<string, Presentation>();
+            this.presentations = presentations;
         }
 
         public Presentation GetPresentation(string id) {

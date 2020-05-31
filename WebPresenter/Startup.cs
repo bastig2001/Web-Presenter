@@ -30,9 +30,10 @@ namespace WebPresenter {
             services.AddDbContext<WebPresenterContext>(options => 
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultDB"))
             );
-            
+
+            services.AddSingleton<StorageService<Presentation>>();
             services.AddTransient<PresentationDataService>();
-            services.AddSingleton<PresentationsService>();
+            services.AddTransient<PresentationsService>();
             services.AddSingleton<GroupManager>();
         }
 

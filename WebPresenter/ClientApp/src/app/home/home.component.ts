@@ -12,6 +12,6 @@ export class HomeComponent {
   }
 
   createPresentation() {
-    this.ps.createPresentation(id => this.router.navigate(["/presenter", id]));
+    //this.ps.createPresentation(id => this.router.navigate(["/presenter", id]));
   }
 }

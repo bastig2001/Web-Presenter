@@ -29,6 +29,7 @@ export class PresentationsService {
     this.connection.on("SetSlideNotes", this.setSlideNotes_local.bind(this));
     this.connection.on("ClearSlideNotes", this.clearSlideNotes_local.bind(this));
     this.connection.on("SetImagePresentation", this.getImagePresentation.bind(this));
+    this.connection.on("ReloadImagePresentation", this.getImagePresentation.bind(this));
   }
 
   connect(id: string) {
@@ -57,7 +58,7 @@ export class PresentationsService {
 
   getPresentation() {
     this.isLoadingPresentation = true;
-    this.http.get<Presentation>(`/controllers/presentations/${this.presentationId}`)
+    this.http.get<Presentation>(`/data/presentations/${this.presentationId}`)
       .subscribe(
         presentation => {
           this.presentation = presentation;
@@ -195,28 +196,20 @@ export class PresentationsService {
     formData.append('imageFile', imageFile);
     this.http.put(`/controllers/presentations/${this.presentationId}/image-presentation`, formData)
       .subscribe(
-        () => this.isLoading = false,
+        () => this.getImagePresentation(),
         error => console.error(error)
       );
   }
 
-  getImagePresentation() {
+  private getImagePresentation() {
     this.isLoading = true;
-    this.http.get<string[]>(`/controllers/presentations/${this.presentationId}/image-presentation`)
+    this.http.get<string[]>(`/data/presentations/${this.presentationId}/image-presentation`)
       .subscribe(
         imagePresentation => {
           this.presentation.imagePresentation = imagePresentation;
           this.presentation.numberOfSlides = imagePresentation.length;
+          this.isLoading = false;
         },
-        error => console.error(error)
-      );
-  }
-
-  createPresentation(callback: (id: string) => void) {
-    this.isLoading = true;
-    this.http.post("/controllers/presentations", {})
-      .subscribe(
-        id => callback(id.toString()),
         error => console.error(error)
       );
   }
