@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using WebPresenter.Hubs;
 using WebPresenter.Models;
 using WebPresenter.Services;
@@ -14,6 +15,7 @@ namespace WebPresenter.Controllers {
     public class PresentationsController : ControllerBase {
         private readonly PresentationsService presentations;
         private readonly PresentationDataService data;
+        private readonly PresentationsHub hubContext;
 
         public PresentationsController(PresentationsService presentations, PresentationDataService data) {
             this.presentations = presentations;

@@ -32,7 +32,7 @@ namespace WebPresenter {
             );
             
             services.AddTransient<PresentationDataService>();
-            services.AddSingleton<PresentationsService>();
+            services.AddScoped<PresentationsService>();
             services.AddSingleton<GroupManager>();
         }
 
