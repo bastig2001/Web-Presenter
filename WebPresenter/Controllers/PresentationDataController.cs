@@ -5,7 +5,7 @@ using WebPresenter.Services;
 
 namespace WebPresenter.Controllers {
     [ApiController]
-    [Route("[controller]")]
+    [Route("data/[controller]")]
     public class PresentationDataController : ControllerBase {
         private readonly PresentationDataService data;
 

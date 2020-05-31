@@ -4,12 +4,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebPresenter.Models;
 using WebPresenter.Services;
 
 namespace WebPresenter.Controllers {
     [ApiController]
-    [Route("[controller]")]
+    [Route("data/[controller]")]
     public class PresentationsController : ControllerBase {
         private readonly PresentationsService presentations;
 
