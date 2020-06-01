@@ -6,11 +6,11 @@ using WebPresenter.Models;
 namespace WebPresenter.Services {
     public class PresentationsService {
         private readonly PresentationDataService data;
-        private readonly Dictionary<string, Presentation> presentations;
+        private readonly StorageService<Presentation> presentations;
         
-        public PresentationsService(PresentationDataService data) {
+        public PresentationsService(PresentationDataService data, StorageService<Presentation> presentations) {
             this.data = data;
-            presentations = new Dictionary<string, Presentation>();
+            this.presentations = presentations;
         }
 
         public Presentation GetPresentation(string id) {
@@ -25,26 +25,14 @@ namespace WebPresenter.Services {
             return presentations.Values.Where(pres => pres.OwnerName == ownerName);
         }
         
-        public IEnumerable<Presentation> GetPresentations(User owner) {
-            return GetPresentations(owner.Name);
-        }
-        
         public IEnumerable<Presentation> GetPresentations(string name, string ownerName) {
             return presentations.Values.Where(pres => pres.OwnerName == ownerName && pres.Name == name);
-        }
-        
-        public IEnumerable<Presentation> GetPresentations(string name, User owner) {
-            return GetPresentations(name, owner.Name);
-        }
-
-        public string StartPresentation(string name, User owner) {
-            return StartPresentation(name, owner.Name);
         }
         
         public string StartPresentation(string name, string ownerName) {
             var presentationData = data.GetPresentation(name, ownerName);
 
-            return presentationData == null ? "" : StartPresentation(presentationData);
+            return presentationData == null ? "" : StartPresentation((PresentationData) presentationData.Clone());
         }
         
         public string StartPresentation(PresentationData presentationData) {

@@ -30,10 +30,13 @@ namespace WebPresenter {
             services.AddDbContext<WebPresenterContext>(options => 
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultDB"))
             );
+
+            services.AddSingleton<StorageService<Presentation>>();
+            services.AddSingleton<StorageService<string>>();
             
             services.AddTransient<PresentationDataService>();
-            services.AddScoped<PresentationsService>();
-            services.AddSingleton<GroupManager>();
+            services.AddTransient<PresentationsService>();
+            services.AddTransient<GroupManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

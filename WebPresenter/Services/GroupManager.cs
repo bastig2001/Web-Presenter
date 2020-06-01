@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace WebPresenter.Services {
     public class GroupManager {
-        private readonly Dictionary<string, string> connectionGroups;
+        private readonly StorageService<string> connectionGroups;
 
-        public GroupManager() {
-            connectionGroups = new Dictionary<string, string>();
+        public GroupManager(StorageService<string> connectionGroups) {
+            this.connectionGroups = connectionGroups;
         }
 
         public void AddConnectionGroup(string connectionId, string presentationId) {

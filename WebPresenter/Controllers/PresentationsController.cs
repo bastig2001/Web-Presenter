@@ -4,64 +4,47 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using WebPresenter.Hubs;
-using WebPresenter.Models;
 using WebPresenter.Services;
 
 namespace WebPresenter.Controllers {
     [ApiController]
-    [Route("controllers/[controller]")]
+    [Route("data/[controller]")]
     public class PresentationsController : ControllerBase {
         private readonly PresentationsService presentations;
-        private readonly PresentationDataService data;
-        private readonly PresentationsHub hubContext;
 
-        public PresentationsController(PresentationsService presentations, PresentationDataService data) {
+        public PresentationsController(PresentationsService presentations) {
             this.presentations = presentations;
-            this.data = data;
         }
 
-        [HttpGet("data")]
-        public IEnumerable<PresentationData> GetAllPresentationData() {
-            return data.GetPresentations();
-        }
-
-        [HttpGet("data/{ownerName}")]
-        public IEnumerable<PresentationData> GetAllPresentationData_byOwner(string ownerName) {
-            return data.GetPresentations(ownerName);
-        }
-
-        [HttpGet("data/{ownerName}/{name}")]
-        public PresentationData GetPresentationData(string ownerName, string name) {
-            return data.GetPresentation(name, ownerName);
-        }
-
-        [HttpGet("current")]
+        [HttpGet]
         public IEnumerable<Presentation> GetPresentations() {
             return presentations.GetPresentations();
         }
 
-        [HttpGet("current/{ownerName}")]
+        [HttpGet("by/{ownerName}")]
         public IEnumerable<Presentation> GetPresentations_byOwner(string ownerName) {
             return presentations.GetPresentations(ownerName);
         }
         
-        [HttpGet("current/{ownerName}/{name}")]
+        [HttpGet("by/{ownerName}/{name}")]
         public IEnumerable<Presentation> GetPresentations_byOwnerAndName(string ownerName, string name) {
             return presentations.GetPresentations(name, ownerName);
         }
 
-        [HttpGet("view/{id}")]
+        [HttpGet("{id}")]
         public Presentation GetPresentation(string id) {
             return presentations.GetPresentation(id);
+        }
+        
+        [HttpGet("{id}/image-presentation")]
+        public IEnumerable<string> GetImagePresentation(string id) {
+            return presentations.GetPresentation(id).ImagePresentation;
         }
 
         [HttpPut("{id}/image-presentation")]
         public async Task<IActionResult> UploadImagePresentation(string id, IFormFile imageFile) {
             try {
                 await presentations.GetPresentation(id).SetImagePresentation(imageFile);
-                await hubContext.Clients.All.SendAsync("SetImagePresentation");
                 return Ok();
             }
             catch (Exception e) {
@@ -70,17 +53,23 @@ namespace WebPresenter.Controllers {
             }
         }
 
-        [HttpGet("{id}/image-presentation")]
-        public IEnumerable<string> GetImagePresentation(string id) {
-            return presentations.GetPresentation(id).ImagePresentation;
+        [HttpPost]
+        public IActionResult StartPresentation(string name, string ownerName) {
+            string presentationId = presentations.StartPresentation(name, ownerName);
+
+            if (presentationId == "") {
+                return NotFound();
+            }
+            
+            return Ok(new ContentResult {
+                Content = JsonSerializer.Serialize(presentationId),
+                ContentType = "application/json"
+            });
         }
 
-        [HttpPost]
-        public ContentResult CreatePresentation() {
-            return new ContentResult {
-                Content = JsonSerializer.Serialize(presentations.CreatePresentation()),
-                ContentType = "application/json"
-            };
+        [HttpDelete("{id}")]
+        public void EndPresentation(string id) {
+            presentations.EndPresentation(id);
         }
     }
 }
