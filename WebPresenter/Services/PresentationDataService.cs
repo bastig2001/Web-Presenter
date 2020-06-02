@@ -33,7 +33,8 @@ namespace WebPresenter.Services {
         }
 
         public bool AddPresentation(PresentationData presentation) {
-            if (presentation.Name == "" || presentation.OwnerName == "") {
+            if (presentation.Name == "" || presentation.OwnerName == "" || 
+                presentation.Name == null || presentation.OwnerName == null) {
                 return false;
             }
             

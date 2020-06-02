@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebPresenter.Models;
@@ -30,6 +31,7 @@ namespace WebPresenter.Controllers {
 
         [HttpPost]
         public IActionResult CreatePresentation(PresentationFundamentals fundamentals) {
+            Console.WriteLine(fundamentals);
             if (data.CreatePresentation(fundamentals)) {
                 return Ok();
             }
