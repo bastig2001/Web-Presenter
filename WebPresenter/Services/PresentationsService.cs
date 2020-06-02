@@ -28,6 +28,10 @@ namespace WebPresenter.Services {
         public IEnumerable<Presentation> GetPresentations(string name, string ownerName) {
             return presentations.Values.Where(pres => pres.OwnerName == ownerName && pres.Name == name);
         }
+
+        public string StartPresentation(PresentationFundamentals fundamentals) {
+            return StartPresentation(fundamentals.Name, fundamentals.OwnerName);
+        }
         
         public string StartPresentation(string name, string ownerName) {
             var presentationData = data.GetPresentation(name, ownerName);

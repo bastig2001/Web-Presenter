@@ -1,1 +1,7 @@
-<p>presentation-starter works!</p>
+<h2>Starte a Presentation</h2>
+
+<input [(ngModel)]="name" placeholder="Name of the Presentation">
+<br>
+<button class="btn-primary" (click)="startPresentation()">Start</button>
+<br>
+<p [style.color]="startedSuccessfully ? 'green' : 'red'">{{message}}</p>

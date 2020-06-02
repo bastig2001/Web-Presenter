@@ -45,7 +45,7 @@ export class PresentationCreatorComponent implements OnInit {
       this.presentationCreated();
     }
     else {
-      this.message = "There was a problem in creating the presentation.\nThe presentation wasn't created."
+      this.message = "There was a problem in creating the presentation.\nThe presentation wasn't created.";
       console.error(error);
     }
   }

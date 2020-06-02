@@ -54,11 +54,11 @@ namespace WebPresenter.Controllers {
         }
 
         [HttpPost]
-        public IActionResult StartPresentation(string name, string ownerName) {
-            string presentationId = presentations.StartPresentation(name, ownerName);
+        public IActionResult StartPresentation(PresentationFundamentals fundamentals) {
+            string presentationId = presentations.StartPresentation(fundamentals);
 
             if (presentationId == "") {
-                return NotFound();
+                return BadRequest();
             }
             
             return Ok(new ContentResult {

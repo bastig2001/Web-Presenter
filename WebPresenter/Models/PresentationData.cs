@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WebPresenter.Models {
     
+    [Serializable]
     public class PresentationData : ICloneable {
         private string[] slideNotes;
         

@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace WebPresenter {
     public struct PresentationFundamentals {
         public string Name { get; set; }
