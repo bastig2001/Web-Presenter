@@ -3,5 +3,7 @@
 <input [(ngModel)]="name" placeholder="Name of the Presentation">
 <br>
 <input [(ngModel)]="title" placeholder="Title of the Presentation">
-
+<br>
 <button class="btn-primary" (click)="createPresentation()">Create</button>
+<br>
+<p [style.background-color]="createdSuccessfully ? 'green' : 'red'">{{message}}</p>

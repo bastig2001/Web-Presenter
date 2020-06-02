@@ -12,7 +12,7 @@ export class PresentationCreatorComponent implements OnInit {
   private name: string;
   private title: string;
   private message = "";
-  private requestSuccessful: boolean;
+  private createdSuccessfully: boolean;
 
   constructor(private http: HttpClient) { }
 
@@ -39,7 +39,7 @@ export class PresentationCreatorComponent implements OnInit {
   }
 
   private answerReceived(successful: boolean, error: Error) {
-    this.requestSuccessful = successful;
+    this.createdSuccessfully = successful;
 
     if (successful) {
       this.presentationCreated();
