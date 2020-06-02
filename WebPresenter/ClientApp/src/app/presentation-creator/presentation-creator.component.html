@@ -1,1 +1,7 @@
-<p>presentation-creator works!</p>
+<h2>Create a Presentation</h2>
+
+<input [(ngModel)]="name" placeholder="Name of the Presentation">
+<br>
+<input [(ngModel)]="title" placeholder="Title of the Presentation">
+
+<button class="btn-primary" (click)="createPresentation()">Create</button>

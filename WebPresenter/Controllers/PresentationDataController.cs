@@ -29,8 +29,8 @@ namespace WebPresenter.Controllers {
         }
 
         [HttpPost]
-        public IActionResult CreatePresentation(string name, string ownerName, string title) {
-            if (data.CreatePresentation(name, ownerName, title)) {
+        public IActionResult CreatePresentation(PresentationFundamentals fundamentals) {
+            if (data.CreatePresentation(fundamentals)) {
                 return Ok();
             }
 

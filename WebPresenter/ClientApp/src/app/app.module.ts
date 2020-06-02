@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -35,7 +35,9 @@ import { PresentationStarterComponent } from './presentation-starter/presentatio
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'audience/:id', component: AudienceComponent},
-      { path: 'presenter/:id', component: PresenterComponent}
+      { path: 'presenter/:id', component: PresenterComponent},
+      { path: 'create', component: PresentationCreatorComponent},
+      { path: 'start', component: PresentationStarterComponent}
     ])
   ],
   providers: [],

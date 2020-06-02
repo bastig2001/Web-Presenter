@@ -35,6 +35,8 @@
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
         <None Include="ClientApp\src\app\presentation-creator\presentation-creator.component.spec.ts" />
+        <None Include="ClientApp\src\app\types\presentation.ts" />
+        <None Include="ClientApp\src\app\types\presentationFundamentals.ts" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

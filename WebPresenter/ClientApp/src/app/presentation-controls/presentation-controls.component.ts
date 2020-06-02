@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PresentationsService} from "../presentations.service";
-import {PresentationState, TextState} from "../presentation";
+import {PresentationState, TextState} from "../types/presentation";
 
 @Component({
   selector: 'app-presentation-controls',

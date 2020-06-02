@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
-import {Presentation, PresentationState, TextState} from "./presentation";
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {Presentation, PresentationState, TextState} from "./types/presentation";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
