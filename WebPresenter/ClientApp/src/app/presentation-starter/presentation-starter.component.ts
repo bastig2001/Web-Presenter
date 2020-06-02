@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {PresentationFundamentals} from "../types/presentationFundamentals";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-presentation-starter',
@@ -12,7 +13,8 @@ export class PresentationStarterComponent implements OnInit {
   private message = "";
   private startedSuccessfully: boolean;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private router: Router) { }
 
   ngOnInit() {
     this.initAttributes();
@@ -27,19 +29,20 @@ export class PresentationStarterComponent implements OnInit {
     this.sendStartRequest(data, this.answerReceived.bind(this));
   }
 
-  private sendStartRequest(data: PresentationFundamentals, callback: (successful: boolean, error: Error) => void) {
+  private sendStartRequest(data: PresentationFundamentals, callback: (successful: boolean, id: any, error: Error) => void) {
     this.http.post('/data/presentations/', data)
       .subscribe(
-        () => callback(true, null),
-        error => callback(false, error)
+        // @ts-ignore
+        response => callback(true, response.content, undefined),
+        error => callback(false, undefined, error)
       );
   }
 
-  private answerReceived(successful: boolean, error: Error) {
+  private answerReceived(successful: boolean, id: any, error: Error) {
     this.startedSuccessfully = successful;
 
     if (successful) {
-      this.presentationStarted();
+      this.presentationStarted(id);
     }
     else {
       this.message = "There was a problem in starting the presentation.\nThe presentation wasn't started.";
@@ -47,9 +50,10 @@ export class PresentationStarterComponent implements OnInit {
     }
   }
 
-  private presentationStarted() {
+  private presentationStarted(id: any) {
     this.message = "The presentation was successfully started.";
     this.initAttributes();
+    this.router.navigate(["/presenter", id]);
   }
 
   private initAttributes() {

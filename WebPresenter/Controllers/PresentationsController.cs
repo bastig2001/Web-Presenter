@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -61,10 +62,7 @@ namespace WebPresenter.Controllers {
                 return BadRequest();
             }
             
-            return Ok(new ContentResult {
-                Content = JsonSerializer.Serialize(presentationId),
-                ContentType = "application/json"
-            });
+            return Ok(Content(presentationId));
         }
 
         [HttpDelete("{id}")]
