@@ -12,6 +12,7 @@ export class DbPresentationsListComponent implements OnInit {
   private loading: boolean;
   private failure: boolean;
   private failureMessage: string;
+  private selectedPresentation: PresentationFundamentals;
 
   constructor(private http: HttpClient) { }
 
@@ -24,6 +25,7 @@ export class DbPresentationsListComponent implements OnInit {
     this.presentations = [];
     this.failure = false;
     this.failureMessage = "";
+    this.selectedPresentation = null;
   }
 
   private getPresentations() {
@@ -42,6 +44,14 @@ export class DbPresentationsListComponent implements OnInit {
           this.loading = false;
         }
       );
+  }
+
+  private startPresentation(presentation: PresentationFundamentals) {
+    console.log("start");
+  }
+
+  private deletePresentation(presentation: PresentationFundamentals) {
+    console.log("delete");
   }
 
 }

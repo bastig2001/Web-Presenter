@@ -1,1 +1,25 @@
-<p>db-presentations-list works!</p>
+<div *ngIf="loading">
+  <div class="spinner-border text-primary"></div>
+  <em>Loading...</em>
+</div>
+<div *ngIf="!loading">
+  <button class="btn-primary" (click)="getPresentations()">Reload</button>
+</div>
+<div *ngIf="failure">
+  <p style="color: red;">{{failureMessage}}</p>
+</div>
+<div *ngIf="!(loading || failure)">
+  <div *ngFor="let presentation of presentations" class="card" (click)="selectedPresentation = presentation">
+    <div class="card-header">
+      <p>{{presentation.name}}</p>
+      <p>by {{presentation.ownerName}}</p>
+    </div>
+    <div class="card-body">
+      <p style="font-weight: bold">{{presentation.title}}</p>
+    </div>
+    <div class="card-footer collapse" [class.show]="selectedPresentation === presentation">
+      <button class="btn-primary" (click)="startPresentation(presentation)">Start</button>
+      <button class="btn-danger" (click)="deletePresentation(presentation)">Delete</button>
+    </div>
+  </div>
+</div>
