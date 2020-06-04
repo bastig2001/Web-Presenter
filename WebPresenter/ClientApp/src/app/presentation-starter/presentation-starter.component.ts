@@ -17,7 +17,7 @@ export class PresentationStarterComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.initAttributes();
+    this.initProperties();
   }
 
   private startPresentation() {
@@ -52,11 +52,11 @@ export class PresentationStarterComponent implements OnInit {
 
   private presentationStarted(id: any) {
     this.message = "The presentation was successfully started.";
-    this.initAttributes();
+    this.initProperties();
     this.router.navigate(["/presenter", id]);
   }
 
-  private initAttributes() {
+  private initProperties() {
     this.name = "";
   }
 

@@ -17,7 +17,7 @@ export class PresentationCreatorComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.initAttributes();
+    this.initProperties();
   }
 
   private createPresentation() {
@@ -52,10 +52,10 @@ export class PresentationCreatorComponent implements OnInit {
 
   private presentationCreated() {
     this.message = "The presentation was successfully created.";
-    this.initAttributes();
+    this.initProperties();
   }
 
-  private initAttributes() {
+  private initProperties() {
     this.name = "";
     this.title = "";
   }

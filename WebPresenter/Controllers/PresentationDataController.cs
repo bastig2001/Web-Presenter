@@ -15,12 +15,12 @@ namespace WebPresenter.Controllers {
         }
         
         [HttpGet]
-        public IEnumerable<PresentationData> GetPresentations() {
+        public IEnumerable<PresentationFundamentals> GetPresentations() {
             return data.GetPresentations();
         }
 
         [HttpGet("{ownerName}")]
-        public IEnumerable<PresentationData> GetPresentations_byOwner(string ownerName) {
+        public IEnumerable<PresentationFundamentals> GetPresentations_byOwner(string ownerName) {
             return data.GetPresentations(ownerName);
         }
 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
@@ -8,20 +7,20 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace WebPresenter.Models {
     
     [Serializable]
-    public class PresentationData : ICloneable {
+    public class PresentationData : PresentationFundamentals {
         private string[] slideNotes;
         
         [StringLength(256), Required] // Key
-        public string Name { get; set; }
+        public new string Name { get; set; }
         
         [StringLength(256), Required] // Key
-        public string OwnerName { get; set; }
+        public new string OwnerName { get; set; }
         
         [ForeignKey("OwnerName")]
         public User Owner { get; set; }
 
         [StringLength(256)] 
-        public string Title { get; set; }
+        public new string Title { get; set; }
         
         public string Text { get; set; }
         public string PermanentNotes { get; set; }
@@ -62,7 +61,7 @@ namespace WebPresenter.Models {
                    $"{nameof(Text)}: {Text}, {nameof(PermanentNotes)}: {PermanentNotes}";
         }
 
-        public object Clone() {
+        public new object Clone() {
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
             
