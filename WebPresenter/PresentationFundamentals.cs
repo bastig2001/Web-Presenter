@@ -1,6 +1,7 @@
 using System;
 
 namespace WebPresenter {
+    [Serializable]
     public class PresentationFundamentals : ICloneable {
         public string Name { get; set; }
         public string OwnerName { get; set; }

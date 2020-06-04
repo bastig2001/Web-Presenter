@@ -21,21 +21,8 @@ export class PresentationStarterComponent implements OnInit {
   }
 
   private startPresentation() {
-    let data = {
-      name: this.name,
-      ownerName: "anyone"
-    };
-
-    this.sendStartRequest(data, this.answerReceived.bind(this));
-  }
-
-  private sendStartRequest(data: PresentationFundamentals, callback: (successful: boolean, id: any, error: Error) => void) {
-    this.http.post('/data/presentations/', data)
-      .subscribe(
-        // @ts-ignore
-        response => callback(true, response.content, undefined),
-        error => callback(false, undefined, error)
-      );
+    let presentation = new PresentationFundamentals(this.name, "anyone");
+    presentation.start(this.http, this.answerReceived.bind(this));
   }
 
   private answerReceived(successful: boolean, id: any, error: Error) {

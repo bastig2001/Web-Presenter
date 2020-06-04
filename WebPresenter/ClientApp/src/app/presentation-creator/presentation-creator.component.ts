@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Presentation} from "../types/presentation";
 import {HttpClient} from "@angular/common/http";
 import {PresentationFundamentals} from "../types/presentationFundamentals";
 
@@ -21,21 +20,8 @@ export class PresentationCreatorComponent implements OnInit {
   }
 
   private createPresentation() {
-    let data = {
-      name: this.name,
-      ownerName: "anyone",
-      title: this.title
-    };
-
-    this.sendCreateRequest(data, this.answerReceived.bind(this));
-  }
-
-  private sendCreateRequest(data: PresentationFundamentals, callback: (successful: boolean, error: Error) => void) {
-    this.http.post('/data/presentationData/', data)
-      .subscribe(
-        () => callback(true, null),
-        error => callback(false, error)
-      );
+    let presentation = new PresentationFundamentals(this.name, "anyone", this.title);
+    presentation.createInDB(this.http, this.answerReceived.bind(this));
   }
 
   private answerReceived(successful: boolean, error: Error) {
