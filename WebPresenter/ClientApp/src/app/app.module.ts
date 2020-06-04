@@ -43,7 +43,8 @@ import { DbPresentationsListComponent } from './db-presentations-list/db-present
       { path: 'audience/:id', component: AudienceComponent},
       { path: 'presenter/:id', component: PresenterComponent},
       { path: 'create', component: PresentationCreatorComponent},
-      { path: 'start', component: PresentationStarterComponent}
+      { path: 'start', component: PresentationStarterComponent},
+      { path: 'list', component: PresentationsListComponent}
     ])
   ],
   providers: [],
