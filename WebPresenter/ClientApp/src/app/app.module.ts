@@ -14,6 +14,9 @@ import { PresentationViewComponent } from './presentation-view/presentation-view
 import { PresentationControlsComponent } from './presentation-controls/presentation-controls.component';
 import { PresentationCreatorComponent } from './presentation-creator/presentation-creator.component';
 import { PresentationStarterComponent } from './presentation-starter/presentation-starter.component';
+import { PresentationsListComponent } from './presentations-list/presentations-list.component';
+import { CurrentPresentationsListComponent } from './current-presentations-list/current-presentations-list.component';
+import { DbPresentationsListComponent } from './db-presentations-list/db-presentations-list.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import { PresentationStarterComponent } from './presentation-starter/presentatio
     PresentationViewComponent,
     PresentationControlsComponent,
     PresentationCreatorComponent,
-    PresentationStarterComponent
+    PresentationStarterComponent,
+    PresentationsListComponent,
+    CurrentPresentationsListComponent,
+    DbPresentationsListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
