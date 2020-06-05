@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebPresenter.Models;
 using WebPresenter.Services;
@@ -16,12 +17,12 @@ namespace WebPresenter.Controllers {
         
         [HttpGet]
         public IEnumerable<PresentationFundamentals> GetPresentations() {
-            return data.GetPresentations();
+            return data.GetPresentations().Select(presentation => new PresentationFundamentals(presentation));
         }
 
         [HttpGet("{ownerName}")]
         public IEnumerable<PresentationFundamentals> GetPresentations_byOwner(string ownerName) {
-            return data.GetPresentations(ownerName);
+            return data.GetPresentations(ownerName).Select(presentation => new PresentationFundamentals(presentation));
         }
 
         [HttpGet("{ownerName}/{name}")]

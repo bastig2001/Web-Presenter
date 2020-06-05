@@ -16,18 +16,18 @@ namespace WebPresenter.Controllers {
         }
 
         [HttpGet]
-        public IEnumerable<PresentationFundamentals> GetPresentations() {
-            return presentations.GetPresentations();
+        public IEnumerable<RunningPresentationFundamentals> GetPresentations() {
+            return presentations.GetPresentationFundamentals();
         }
 
         [HttpGet("by/{ownerName}")]
-        public IEnumerable<PresentationFundamentals> GetPresentations_byOwner(string ownerName) {
-            return presentations.GetPresentations(ownerName);
+        public IEnumerable<RunningPresentationFundamentals> GetPresentations_byOwner(string ownerName) {
+            return presentations.GetPresentationFundamentals(ownerName);
         }
         
         [HttpGet("by/{ownerName}/{name}")]
-        public IEnumerable<PresentationFundamentals> GetPresentations_byOwnerAndName(string ownerName, string name) {
-            return presentations.GetPresentations(name, ownerName);
+        public IEnumerable<RunningPresentationFundamentals> GetPresentations_byOwnerAndName(string ownerName, string name) {
+            return presentations.GetPresentationFundamentals(name, ownerName);
         }
 
         [HttpGet("{id}")]
