@@ -12,7 +12,7 @@ export class PresentationFundamentals {
   }
 
   public createInDB(http: HttpClient, callback: (successful: boolean, error: Error) => void) {
-    http.post('/data/presentationData/', this)
+    http.post("/data/presentationData/", this)
       .subscribe(
         () => callback(true, null),
         error => callback(false, error)
@@ -20,11 +20,19 @@ export class PresentationFundamentals {
   }
 
   public start(http: HttpClient, callback: (successful: boolean, id: any, error: Error) => void) {
-    http.post('/data/presentations/', this)
+    http.post("/data/presentations/", this)
       .subscribe(
         // @ts-ignore
         response => callback(true, response.content, undefined),
         error => callback(false, undefined, error)
+      );
+  }
+
+  public deleteInDB(http: HttpClient, callback: (successful: boolean, error: Error) => void) {
+    http.delete(`/data/presentationData/${this.ownerName}/${this.name}`)
+      .subscribe(
+        () => callback(true, null),
+        error => callback(false, error)
       );
   }
 }
