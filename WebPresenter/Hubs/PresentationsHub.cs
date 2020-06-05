@@ -103,7 +103,7 @@ namespace WebPresenter.Hubs {
             groupName = groups.GetGroupName(Context.ConnectionId);
             presentation = presentations.GetPresentation(groupName);
         }
-        
+
         // public async Task UploadImagePresentation(IAsyncEnumerable<string> stream) {
         //     Console.WriteLine("uploading");
         //     await using (var memoryStream = new MemoryStream()) {

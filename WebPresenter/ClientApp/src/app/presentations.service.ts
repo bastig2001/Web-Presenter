@@ -203,7 +203,9 @@ export class PresentationsService {
     formData.append('imageFile', imageFile);
     this.http.put(`/data/presentations/${this.presentationId}/image-presentation`, formData)
       .subscribe(
-        () => this.getImagePresentation(),
+        () =>
+          this.connection.invoke("ReloadImagePresentation")
+            .then(() => this.getImagePresentation),
         error => console.error(error)
       );
   }
