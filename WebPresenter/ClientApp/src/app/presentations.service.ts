@@ -15,6 +15,7 @@ export class PresentationsService {
   isLoadingPresentation: boolean = false;
   isConnected: boolean = false;
   hasEnded: boolean = false;
+  presentationHasLoadingProblem: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -66,7 +67,11 @@ export class PresentationsService {
           this.presentation = presentation;
           this.isLoadingPresentation = false;
         },
-        error => console.error(error)
+        error => {
+          console.error(error);
+          this.presentationHasLoadingProblem = true;
+          this.isLoadingPresentation = false;
+        }
       );
   }
 
@@ -196,7 +201,7 @@ export class PresentationsService {
     this.isLoading = true;
     let formData = new FormData();
     formData.append('imageFile', imageFile);
-    this.http.put(`/controllers/presentations/${this.presentationId}/image-presentation`, formData)
+    this.http.put(`/data/presentations/${this.presentationId}/image-presentation`, formData)
       .subscribe(
         () => this.getImagePresentation(),
         error => console.error(error)
