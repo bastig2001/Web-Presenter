@@ -14,6 +14,7 @@ export class PresentationsService {
   isLoading: boolean = false;
   isLoadingPresentation: boolean = false;
   isConnected: boolean = false;
+  hasEnded: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +31,7 @@ export class PresentationsService {
     this.connection.on("ClearSlideNotes", this.clearSlideNotes_local.bind(this));
     this.connection.on("SetImagePresentation", this.getImagePresentation.bind(this));
     this.connection.on("ReloadImagePresentation", this.getImagePresentation.bind(this));
+    this.connection.on("EndPresentation", this.endPresentation_local.bind(this));
   }
 
   connect(id: string) {
@@ -212,6 +214,26 @@ export class PresentationsService {
         },
         error => console.error(error)
       );
+  }
+
+  endPresentation() {
+    this.isLoading = true;
+    this.http.delete(`/data/presentations/${this.presentationId}`)
+      .subscribe(
+        () =>
+          this.connection.invoke("EndPresentation")
+            .then(() => {
+              this.isLoading = false;
+              this.endPresentation_local();
+            }),
+        error => console.error(error)
+      );
+  }
+
+  private endPresentation_local() {
+    this.hasEnded = true;
+    this.isConnected = false;
+    this.disconnect();
   }
 
   getPresentationId() {
