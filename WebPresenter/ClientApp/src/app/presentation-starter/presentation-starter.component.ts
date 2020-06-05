@@ -22,25 +22,19 @@ export class PresentationStarterComponent implements OnInit {
 
   private startPresentation() {
     let presentation = new PresentationFundamentals(this.name, "anyone");
-    presentation.start(this.http, this.answerReceived.bind(this));
+    presentation.start(this.http, this.presentationStarted.bind(this));
   }
 
-  private answerReceived(successful: boolean, id: any, error: Error) {
+  private presentationStarted(successful: boolean, id: any, error: Error) {
     this.startedSuccessfully = successful;
 
     if (successful) {
-      this.presentationStarted(id);
+      this.router.navigate(["/presenter", id]);
     }
     else {
       this.message = "There was a problem in starting the presentation.\nThe presentation wasn't started.";
       console.error(error);
     }
-  }
-
-  private presentationStarted(id: any) {
-    this.message = "The presentation was successfully started.";
-    this.initProperties();
-    this.router.navigate(["/presenter", id]);
   }
 
   private initProperties() {

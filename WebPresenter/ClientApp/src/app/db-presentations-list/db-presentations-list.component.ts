@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PresentationFundamentals} from "../types/presentationFundamentals";
 import {HttpClient} from "@angular/common/http";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-db-presentations-list',
@@ -14,7 +15,8 @@ export class DbPresentationsListComponent implements OnInit {
   private failureMessage: string;
   private selectedPresentation: PresentationFundamentals;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private router: Router) { }
 
   ngOnInit() {
     this.initAttributes();
@@ -46,12 +48,32 @@ export class DbPresentationsListComponent implements OnInit {
       );
   }
 
-  private startPresentation(presentation: PresentationFundamentals) {
-    console.log("start");
+  private startPresentation(fundamentals: PresentationFundamentals) {
+    let presentation = PresentationFundamentals.fromPresentationFundamentals(fundamentals);
+    presentation.start(this.http, this.presentationStarted.bind(this));
   }
 
-  private deletePresentation(presentation: PresentationFundamentals) {
-    console.log("delete");
+  private presentationStarted(successful: boolean, id: any, error: Error) {
+    if (successful) {
+      this.router.navigate(["/presenter", id]);
+    }
+    else {
+      console.error(error);
+    }
+  }
+
+  private deletePresentation(fundamentals: PresentationFundamentals) {
+    let presentation = PresentationFundamentals.fromPresentationFundamentals(fundamentals);
+    presentation.deleteInDB(this.http, this.presentationDeleted.bind(this));
+  }
+
+  private presentationDeleted(successful: boolean, error: Error) {
+    if (successful) {
+      this.getPresentations();
+    }
+    else {
+      console.error(error);
+    }
   }
 
 }

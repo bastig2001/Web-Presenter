@@ -5,6 +5,10 @@ export class PresentationFundamentals {
   public ownerName: string;
   public title: string;
 
+  static fromPresentationFundamentals(other: PresentationFundamentals): PresentationFundamentals {
+    return new PresentationFundamentals(other.name, other.ownerName, other.title);
+  }
+
   constructor(name: string, ownerName: string, title = "") {
     this.name = name;
     this.ownerName = ownerName;
