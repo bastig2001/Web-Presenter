@@ -38,6 +38,7 @@ export class DbPresentationsListComponent implements OnInit {
         (presentations: PresentationFundamentals[]) => {
           this.presentations = presentations;
           this.loading = false;
+          this.failure = false;
         },
         error => {
           console.error(error);
