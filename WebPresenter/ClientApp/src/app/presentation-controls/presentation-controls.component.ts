@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {PresentationsService} from "../presentations.service";
 import {PresentationState, TextState} from "../types/presentation";
+import {HttpClient} from "@angular/common/http";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-presentation-controls',
@@ -13,12 +15,16 @@ export class PresentationControlsComponent implements OnInit {
   private nameInput: string;
   private slideNumberInput: number;
   private fileInput: File;
+  private audienceLink: string;
 
-  constructor(private ps: PresentationsService) { }
+  constructor(private ps: PresentationsService,
+              private http: HttpClient,
+              private router: Router) { }
 
   ngOnInit() {
     this.nameInput = this.ps.presentation.title;
     this.slideNumberInput = undefined;
+    this.audienceLink = `${window.location.origin}/audience/${this.ps.getPresentationId()}`
   }
 
   cancelNameInput() {
@@ -42,6 +48,14 @@ export class PresentationControlsComponent implements OnInit {
 
   setFileInput(files: FileList) {
     this.fileInput = files.item(0);
+  }
+
+  endPresentation() {
+    this.http.delete(`/data/presentations/${this.ps.getPresentationId()}`)
+      .subscribe(
+        () => this.router.navigate(["/"]),
+        error => console.error(error)
+      );
   }
 
 }

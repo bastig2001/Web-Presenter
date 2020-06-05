@@ -31,8 +31,15 @@ namespace WebPresenter.Controllers {
         }
 
         [HttpGet("{id}")]
-        public Presentation GetPresentation(string id) {
-            return presentations.GetPresentation(id);
+        public IActionResult GetPresentation(string id) {
+            var presentation = presentations.GetPresentation(id);
+
+            if (presentation == null) {
+                return BadRequest();
+            }
+            else {
+                return Ok(presentation);
+            }
         }
         
         [HttpGet("{id}/image-presentation")]

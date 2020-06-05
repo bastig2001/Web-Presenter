@@ -214,6 +214,10 @@ export class PresentationsService {
       );
   }
 
+  getPresentationId() {
+    return this.presentationId;
+  }
+
   // async uploadImagePresentation(imageFile: File) {
   //   await this.uploadFile("UploadImagePresentation", imageFile);
   // }
