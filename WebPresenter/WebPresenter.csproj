@@ -28,8 +28,19 @@
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
         <Content Remove="$(SpaRoot)**" />
+        <Content Include="ClientApp\src\app\current-presentations-list\current-presentations-list.component.css" />
+        <Content Include="ClientApp\src\app\current-presentations-list\current-presentations-list.component.html" />
+        <Content Include="ClientApp\src\app\db-presentations-list\db-presentations-list.component.css" />
+        <Content Include="ClientApp\src\app\db-presentations-list\db-presentations-list.component.html" />
+        <Content Include="ClientApp\src\app\presentation-creator\presentation-creator.component.css" />
+        <Content Include="ClientApp\src\app\presentation-creator\presentation-creator.component.html" />
+        <Content Include="ClientApp\src\app\presentation-starter\presentation-starter.component.css" />
+        <Content Include="ClientApp\src\app\presentation-starter\presentation-starter.component.html" />
+        <Content Include="ClientApp\src\app\presentations-list\presentations-list.component.css" />
+        <Content Include="ClientApp\src\app\presentations-list\presentations-list.component.html" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+        <None Include="ClientApp\src\app\types\runningPresentationFundamentals.ts" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

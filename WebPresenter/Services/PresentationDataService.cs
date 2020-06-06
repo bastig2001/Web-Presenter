@@ -24,11 +24,20 @@ namespace WebPresenter.Services {
             return db.Presentations.Where(pres => pres.OwnerName == ownerName);
         }
 
+        public bool CreatePresentation(PresentationFundamentals fundamentals) {
+            return CreatePresentation(fundamentals.Name, fundamentals.OwnerName, fundamentals.Title);
+        }
+
         public bool CreatePresentation(string name, string ownerName, string title = "New Presentation") {
             return AddPresentation(new PresentationData(name, ownerName, title));
         }
 
         public bool AddPresentation(PresentationData presentation) {
+            if (presentation.Name == "" || presentation.OwnerName == "" || 
+                presentation.Name == null || presentation.OwnerName == null) {
+                return false;
+            }
+            
             if (db.Presentations.Find(presentation.Name, presentation.OwnerName) != null) {
                 return false;
             }

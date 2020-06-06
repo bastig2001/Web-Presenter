@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,23 +16,30 @@ namespace WebPresenter.Controllers {
         }
 
         [HttpGet]
-        public IEnumerable<Presentation> GetPresentations() {
-            return presentations.GetPresentations();
+        public IEnumerable<RunningPresentationFundamentals> GetPresentations() {
+            return presentations.GetPresentationFundamentals();
         }
 
         [HttpGet("by/{ownerName}")]
-        public IEnumerable<Presentation> GetPresentations_byOwner(string ownerName) {
-            return presentations.GetPresentations(ownerName);
+        public IEnumerable<RunningPresentationFundamentals> GetPresentations_byOwner(string ownerName) {
+            return presentations.GetPresentationFundamentals(ownerName);
         }
         
         [HttpGet("by/{ownerName}/{name}")]
-        public IEnumerable<Presentation> GetPresentations_byOwnerAndName(string ownerName, string name) {
-            return presentations.GetPresentations(name, ownerName);
+        public IEnumerable<RunningPresentationFundamentals> GetPresentations_byOwnerAndName(string ownerName, string name) {
+            return presentations.GetPresentationFundamentals(name, ownerName);
         }
 
         [HttpGet("{id}")]
-        public Presentation GetPresentation(string id) {
-            return presentations.GetPresentation(id);
+        public IActionResult GetPresentation(string id) {
+            var presentation = presentations.GetPresentation(id);
+
+            if (presentation == null) {
+                return BadRequest();
+            }
+            else {
+                return Ok(presentation);
+            }
         }
         
         [HttpGet("{id}/image-presentation")]
@@ -54,17 +60,14 @@ namespace WebPresenter.Controllers {
         }
 
         [HttpPost]
-        public IActionResult StartPresentation(string name, string ownerName) {
-            string presentationId = presentations.StartPresentation(name, ownerName);
+        public IActionResult StartPresentation(PresentationFundamentals fundamentals) {
+            string presentationId = presentations.StartPresentation(fundamentals);
 
             if (presentationId == "") {
-                return NotFound();
+                return BadRequest();
             }
             
-            return Ok(new ContentResult {
-                Content = JsonSerializer.Serialize(presentationId),
-                ContentType = "application/json"
-            });
+            return Ok(Content(presentationId));
         }
 
         [HttpDelete("{id}")]

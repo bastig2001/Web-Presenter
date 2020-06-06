@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -12,6 +12,11 @@ import { PresenterComponent } from './presenter/presenter.component';
 import { PresentationMenuComponent } from './presentation-menu/presentation-menu.component';
 import { PresentationViewComponent } from './presentation-view/presentation-view.component';
 import { PresentationControlsComponent } from './presentation-controls/presentation-controls.component';
+import { PresentationCreatorComponent } from './presentation-creator/presentation-creator.component';
+import { PresentationStarterComponent } from './presentation-starter/presentation-starter.component';
+import { PresentationsListComponent } from './presentations-list/presentations-list.component';
+import { CurrentPresentationsListComponent } from './current-presentations-list/current-presentations-list.component';
+import { DbPresentationsListComponent } from './db-presentations-list/db-presentations-list.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +27,12 @@ import { PresentationControlsComponent } from './presentation-controls/presentat
     PresenterComponent,
     PresentationMenuComponent,
     PresentationViewComponent,
-    PresentationControlsComponent
+    PresentationControlsComponent,
+    PresentationCreatorComponent,
+    PresentationStarterComponent,
+    PresentationsListComponent,
+    CurrentPresentationsListComponent,
+    DbPresentationsListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -31,7 +41,10 @@ import { PresentationControlsComponent } from './presentation-controls/presentat
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'audience/:id', component: AudienceComponent},
-      { path: 'presenter/:id', component: PresenterComponent}
+      { path: 'presenter/:id', component: PresenterComponent},
+      { path: 'create', component: PresentationCreatorComponent},
+      { path: 'start', component: PresentationStarterComponent},
+      { path: 'list', component: PresentationsListComponent}
     ])
   ],
   providers: [],

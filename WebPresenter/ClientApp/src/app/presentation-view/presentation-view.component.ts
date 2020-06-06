@@ -1,6 +1,6 @@
 import {Component, OnInit, SecurityContext} from '@angular/core';
 import {PresentationsService} from "../presentations.service";
-import {PresentationState, TextState} from "../presentation";
+import {PresentationState, TextState} from "../types/presentation";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Remarkable} from 'remarkable';
 

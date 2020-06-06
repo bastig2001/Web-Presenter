@@ -19,13 +19,13 @@ namespace WebPresenter {
         Paragraphs
     }
 
-    public class Presentation {
+    public class Presentation : PresentationFundamentals {
         protected internal PresentationData Data { get; }
-        public string Name => Data.Name;
-        public string OwnerName => Data.OwnerName;
+        public new string Name => Data.Name;
+        public new string OwnerName => Data.OwnerName;
         public PresentationState PresentationState { get; set; }
         public TextState TextState { get; set; }
-        public string Title { get => Data.Title; set => Data.Title = value; }
+        public new string Title { get => Data.Title; set => Data.Title = value; }
         public string Text { get => Data.Text; set => Data.Text = value; }
         public string PermanentNotes { get => Data.PermanentNotes; set => Data.PermanentNotes = value; }
         

@@ -29,6 +29,27 @@ namespace WebPresenter.Services {
             return presentations.Values.Where(pres => pres.OwnerName == ownerName && pres.Name == name);
         }
         
+        public IEnumerable<RunningPresentationFundamentals> GetPresentationFundamentals() {
+            return presentations.AsEnumerable()
+                .Select(pair => new RunningPresentationFundamentals(pair.Value, pair.Key));
+        }
+        
+        public IEnumerable<RunningPresentationFundamentals> GetPresentationFundamentals(string ownerName) {
+            return presentations.AsEnumerable()
+                .Where(pair => pair.Value.OwnerName == ownerName)
+                .Select(pair => new RunningPresentationFundamentals(pair.Value, pair.Key));
+        }
+        
+        public IEnumerable<RunningPresentationFundamentals> GetPresentationFundamentals(string name, string ownerName) {
+            return presentations.AsEnumerable()
+                .Where(pair => pair.Value.OwnerName == ownerName && pair.Value.Name == name)
+                .Select(pair => new RunningPresentationFundamentals(pair.Value, pair.Key));
+        }
+
+        public string StartPresentation(PresentationFundamentals fundamentals) {
+            return StartPresentation(fundamentals.Name, fundamentals.OwnerName);
+        }
+        
         public string StartPresentation(string name, string ownerName) {
             var presentationData = data.GetPresentation(name, ownerName);
 

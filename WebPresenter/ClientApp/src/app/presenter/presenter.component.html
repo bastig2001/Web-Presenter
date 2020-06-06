@@ -1,4 +1,4 @@
-<div *ngIf="ps.isConnected && !ps.isLoadingPresentation" class="presentation audience">
+<div *ngIf="ps.isConnected && !ps.isLoadingPresentation && !ps.presentationHasLoadingProblem" class="presentation audience">
   <app-presentation-menu></app-presentation-menu>
   <app-presentation-view></app-presentation-view>
   <app-presentation-controls></app-presentation-controls>
@@ -6,6 +6,12 @@
 <em *ngIf="ps.isLoadingPresentation || !ps.isConnected && ps.isLoading">
   Loading...
 </em>
-<em *ngIf="!ps.isConnected && !ps.isLoadingPresentation && !ps.isLoading">
+<em *ngIf="!ps.isConnected && !ps.isLoadingPresentation && !ps.isLoading && !ps.hasEnded">
   Not Connected
+</em>
+<em *ngIf="ps.hasEnded" style="color: red">
+  The Presentation has been ended.
+</em>
+<em *ngIf="ps.presentationHasLoadingProblem">
+  The Presentation can't be loaded.
 </em>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PresentationsService} from "../presentations.service";
-import {PresentationState, TextState} from "../presentation";
+import {PresentationState, TextState} from "../types/presentation";
 
 @Component({
   selector: 'app-presentation-controls',
@@ -13,12 +13,14 @@ export class PresentationControlsComponent implements OnInit {
   private nameInput: string;
   private slideNumberInput: number;
   private fileInput: File;
+  private audienceLink: string;
 
   constructor(private ps: PresentationsService) { }
 
   ngOnInit() {
     this.nameInput = this.ps.presentation.title;
     this.slideNumberInput = undefined;
+    this.audienceLink = `${window.location.origin}/audience/${this.ps.getPresentationId()}`
   }
 
   cancelNameInput() {
@@ -42,6 +44,10 @@ export class PresentationControlsComponent implements OnInit {
 
   setFileInput(files: FileList) {
     this.fileInput = files.item(0);
+  }
+
+  endPresentation() {
+    this.ps.endPresentation();
   }
 
 }

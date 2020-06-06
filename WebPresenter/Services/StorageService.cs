@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WebPresenter.Services {
     public class StorageService<T> {
@@ -29,6 +30,10 @@ namespace WebPresenter.Services {
 
         public bool Remove(string key) {
             return dict.Remove(key);
+        }
+
+        public IEnumerable<KeyValuePair<string, T>> AsEnumerable() {
+            return dict.AsEnumerable();
         }
     }
 }

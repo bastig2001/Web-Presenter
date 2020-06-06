@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
-import {Presentation, PresentationState, TextState} from "./presentation";
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {Presentation, PresentationState, TextState} from "./types/presentation";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,8 @@ export class PresentationsService {
   isLoading: boolean = false;
   isLoadingPresentation: boolean = false;
   isConnected: boolean = false;
+  hasEnded: boolean = false;
+  presentationHasLoadingProblem: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +32,7 @@ export class PresentationsService {
     this.connection.on("ClearSlideNotes", this.clearSlideNotes_local.bind(this));
     this.connection.on("SetImagePresentation", this.getImagePresentation.bind(this));
     this.connection.on("ReloadImagePresentation", this.getImagePresentation.bind(this));
+    this.connection.on("EndPresentation", this.endPresentation_local.bind(this));
   }
 
   connect(id: string) {
@@ -64,7 +67,11 @@ export class PresentationsService {
           this.presentation = presentation;
           this.isLoadingPresentation = false;
         },
-        error => console.error(error)
+        error => {
+          console.error(error);
+          this.presentationHasLoadingProblem = true;
+          this.isLoadingPresentation = false;
+        }
       );
   }
 
@@ -194,9 +201,11 @@ export class PresentationsService {
     this.isLoading = true;
     let formData = new FormData();
     formData.append('imageFile', imageFile);
-    this.http.put(`/controllers/presentations/${this.presentationId}/image-presentation`, formData)
+    this.http.put(`/data/presentations/${this.presentationId}/image-presentation`, formData)
       .subscribe(
-        () => this.getImagePresentation(),
+        () =>
+          this.connection.invoke("ReloadImagePresentation")
+            .then(() => this.getImagePresentation),
         error => console.error(error)
       );
   }
@@ -212,6 +221,30 @@ export class PresentationsService {
         },
         error => console.error(error)
       );
+  }
+
+  endPresentation() {
+    this.isLoading = true;
+    this.http.delete(`/data/presentations/${this.presentationId}`)
+      .subscribe(
+        () =>
+          this.connection.invoke("EndPresentation")
+            .then(() => {
+              this.isLoading = false;
+              this.endPresentation_local();
+            }),
+        error => console.error(error)
+      );
+  }
+
+  private endPresentation_local() {
+    this.hasEnded = true;
+    this.isConnected = false;
+    this.disconnect();
+  }
+
+  getPresentationId() {
+    return this.presentationId;
   }
 
   // async uploadImagePresentation(imageFile: File) {
