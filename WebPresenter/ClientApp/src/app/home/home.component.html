@@ -14,9 +14,10 @@
       <div class="card-body">
         <h4 class="card-title">Presentations</h4>
         <p class="card-text">Create fast and easy presentations to share with your colleagues / teachers / students.</p>
-        <button (click)="createPresentation()" class="btn-primary btn">Create Presentation</button>
+        <a [routerLink]="['/create']" class="btn btn-primary">Create Presentation</a>
       </div>
     </div>
+    <!--
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Audience</h4>
@@ -24,5 +25,6 @@
         <button class="btn-primary btn">Join Presentation</button>
       </div>
     </div>
+    -->
   </div>
  </div>

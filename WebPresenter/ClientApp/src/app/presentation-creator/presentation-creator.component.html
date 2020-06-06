@@ -1,9 +1,33 @@
-<h2>Create a Presentation</h2>
 
-<input [(ngModel)]="name" placeholder="Name of the Presentation">
-<br>
-<input [(ngModel)]="title" placeholder="Title of the Presentation">
-<br>
-<button class="btn-primary" (click)="createPresentation()">Create</button>
-<br>
-<p [style.color]="createdSuccessfully ? 'green' : 'red'">{{message}}</p>
+<div class="row">
+  <div class="jumbotron">
+    <h2 class="display-4">Create your presentation</h2>
+    <p class="lead">Simply write the name under which your presentaion will be saved and its title in the boxes and you are good to go!</p>
+    <hr class="my-4">
+    <p>The name is the identifier of your presentaion.</p>
+    <p>The title is shown to your audience so that they know what they are in for.</p>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="name">Name: </span>
+      </div>
+      <input type="text" [(ngModel)]="name" class="form-control" placeholder="Name of your presentation" aria-label="Name" aria-describedby="name">
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="title">Title: </span>
+      </div>
+      <input type="text" [(ngModel)]="title" class="form-control" placeholder="Name of your presentation" aria-label="title" aria-describedby="title">
+    </div>
+    <button class="btn btn-primary" (click)="createPresentation()">Create</button>
+  </div>
+</div>
+<div class="row">
+  <div class="alert alert-success" role="alert" *ngIf="createdSuccessfully">
+    {{message}}
+  </div>
+</div>
+<div class="row">
+  <div class="alert alert-danger" role="alert" *ngIf="!createdSuccessfully">
+    {{message}}
+  </div>
+</div>

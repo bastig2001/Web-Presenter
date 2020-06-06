@@ -1,19 +1,27 @@
 <div class="presentation-menu">
-  <div class="radio-group" id="presentation-state-radio-group">
-    <label>
-      <input type="radio" [value]="PresentationState.Text" name="presentation-state"
-             [checked]="ps.presentation.presentationState == PresentationState.Text"
-             (change)="ps.setPresentationState(PresentationState.Text)"
-      />
-      <span>Text</span>
-    </label>
-    <label>
-      <input type="radio" [value]="PresentationState.Slides" name="presentation-state"
-             [checked]="ps.presentation.presentationState == PresentationState.Slides"
-             (change)="ps.setPresentationState(PresentationState.Slides)"
-      />
-      <span>Slides</span>
-    </label>
+  <div class="row mt-4">
+    <div class="radio-group" id="presentation-state-radio-group">
+      <div class="form-check-inline">
+        <label class="form-check-label">
+          <input type="radio" [value]="PresentationState.Text" name="presentation-state"
+                 [checked]="ps.presentation.presentationState == PresentationState.Text"
+                 (change)="ps.setPresentationState(PresentationState.Text)"
+                 class="form-check-input"
+          />
+          Text
+        </label>
+      </div>
+      <div class="form-check-inline">
+        <label class="form-check-label">
+          <input type="radio" [value]="PresentationState.Slides" name="presentation-state"
+                 [checked]="ps.presentation.presentationState == PresentationState.Slides"
+                 (change)="ps.setPresentationState(PresentationState.Slides)"
+                 class="form-check-input"
+          />
+          Slides
+        </label>
+       </div>
+    </div>
   </div>
   <div class="field" id="name-field">
     <label>
