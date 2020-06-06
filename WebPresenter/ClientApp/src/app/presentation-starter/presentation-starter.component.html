@@ -1,7 +1,30 @@
-<h2>Starte a Presentation</h2>
-
-<input [(ngModel)]="name" placeholder="Name of the Presentation">
-<br>
-<button class="btn-primary" (click)="startPresentation()">Start</button>
-<br>
-<p [style.color]="startedSuccessfully ? 'green' : 'red'">{{message}}</p>
+<div class="row">
+  <div class="jumbotron col">
+    <h2 class="display-4">Start editing a Presentation</h2>
+    <p class="lead">Type in the name of a presentation and start editing it.</p>
+    <hr class="my-4" />
+    <div class="input-group">
+      <!--
+  <div class="input-group-prepend">
+    <span class="input-group-text">
+      Name of the presentation:
+    </span>
+  </div>
+    -->
+      <input type="text" class="form-control" [(ngModel)]="name" placeholder="Name of your presentation" />
+      <div class="input-group-append">
+        <button class="btn-primary btn" (click)="startPresentation()">Start editing</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="alert alert-success" role="alert" *ngIf="startedSuccessfully">
+    {{message}}
+  </div>
+</div>
+<div class="row">
+  <div class="alert alert-danger" role="alert" *ngIf="!startedSuccessfully && startedSuccessfully != undefined">
+    {{message}}
+  </div>
+</div>
