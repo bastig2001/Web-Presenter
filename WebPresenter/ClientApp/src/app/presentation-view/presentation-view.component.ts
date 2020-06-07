@@ -10,13 +10,13 @@ import {Remarkable} from 'remarkable';
   styleUrls: ['./presentation-view.component.css']
 })
 export class PresentationViewComponent implements OnInit {
-  private PresentationState = PresentationState;
-  private TextState = TextState;
-  private SecurityContext = SecurityContext;
-  private readonly remarker = new Remarkable();
+  PresentationState = PresentationState;
+  TextState = TextState;
+  SecurityContext = SecurityContext;
+  readonly remarker = new Remarkable();
 
-  constructor(private ps: PresentationsService,
-              private sanitizer: DomSanitizer) { }
+  constructor(public ps: PresentationsService,
+              public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }

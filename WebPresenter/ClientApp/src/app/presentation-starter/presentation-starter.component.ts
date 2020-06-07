@@ -9,9 +9,9 @@ import {Router} from "@angular/router";
   styleUrls: ['./presentation-starter.component.css']
 })
 export class PresentationStarterComponent implements OnInit {
-  private name: string;
-  private message = "";
-  private startedSuccessfully: boolean;
+  name: string;
+  message = "";
+  startedSuccessfully: boolean;
 
   constructor(private http: HttpClient,
               private router: Router) { }
@@ -20,7 +20,7 @@ export class PresentationStarterComponent implements OnInit {
     this.initProperties();
   }
 
-  private startPresentation() {
+  startPresentation() {
     let presentation = new PresentationFundamentals(this.name, "anyone");
     presentation.start(this.http, this.presentationStarted.bind(this));
   }

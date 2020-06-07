@@ -8,10 +8,10 @@ import {PresentationFundamentals} from "../types/presentationFundamentals";
   styleUrls: ['./presentation-creator.component.css']
 })
 export class PresentationCreatorComponent implements OnInit {
-  private name: string;
-  private title: string;
-  private message = "";
-  private createdSuccessfully: boolean;
+  name: string;
+  title: string;
+  message = "";
+  createdSuccessfully: boolean;
 
   constructor(private http: HttpClient) { }
 
@@ -19,7 +19,7 @@ export class PresentationCreatorComponent implements OnInit {
     this.initProperties();
   }
 
-  private createPresentation() {
+  createPresentation() {
     let presentation = new PresentationFundamentals(this.name, "anyone", this.title);
     presentation.createInDB(this.http, this.answerReceived.bind(this));
   }

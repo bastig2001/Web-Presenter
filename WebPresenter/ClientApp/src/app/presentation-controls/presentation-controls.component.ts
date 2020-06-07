@@ -8,14 +8,14 @@ import {PresentationState, TextState} from "../types/presentation";
   styleUrls: ['./presentation-controls.component.css']
 })
 export class PresentationControlsComponent implements OnInit {
-  private PresentationState = PresentationState;
-  private TextState = TextState;
-  private nameInput: string;
-  private slideNumberInput: number;
-  private fileInput: File;
-  private audienceLink: string;
+  PresentationState = PresentationState;
+  TextState = TextState;
+  nameInput: string;
+  slideNumberInput: number;
+  fileInput: File;
+  audienceLink: string;
 
-  constructor(private ps: PresentationsService) { }
+  constructor(public ps: PresentationsService) { }
 
   ngOnInit() {
     this.nameInput = this.ps.presentation.title;

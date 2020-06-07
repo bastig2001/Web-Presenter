@@ -9,11 +9,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./current-presentations-list.component.css']
 })
 export class CurrentPresentationsListComponent implements OnInit {
-  private presentations: RunningPresentationFundamentals[];
-  private loading: boolean;
-  private failure: boolean;
-  private failureMessage: string;
-  private selectedPresentation: RunningPresentationFundamentals;
+  presentations: RunningPresentationFundamentals[];
+  loading: boolean;
+  failure: boolean;
+  failureMessage: string;
+  selectedPresentation: RunningPresentationFundamentals;
 
   constructor(private http: HttpClient,
               private router: Router) { }
@@ -30,7 +30,7 @@ export class CurrentPresentationsListComponent implements OnInit {
     this.selectedPresentation = null;
   }
 
-  private getPresentations() {
+  getPresentations() {
     this.loading = true;
 
     this.http.get("data/presentations")
@@ -49,7 +49,7 @@ export class CurrentPresentationsListComponent implements OnInit {
       );
   }
 
-  private viewPresentation(presentation: RunningPresentationFundamentals) {
+  viewPresentation(presentation: RunningPresentationFundamentals) {
     this.router.navigate(["/audience", presentation.id]);
   }
 

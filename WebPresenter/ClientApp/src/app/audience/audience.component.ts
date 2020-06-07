@@ -9,7 +9,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class AudienceComponent implements OnInit {
 
-  constructor(private ps: PresentationsService,
+  constructor(public ps: PresentationsService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {

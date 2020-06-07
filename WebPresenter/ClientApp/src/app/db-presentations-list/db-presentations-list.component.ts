@@ -9,11 +9,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./db-presentations-list.component.css']
 })
 export class DbPresentationsListComponent implements OnInit {
-  private presentations: PresentationFundamentals[];
-  private loading: boolean;
-  private failure: boolean;
-  private failureMessage: string;
-  private selectedPresentation: PresentationFundamentals;
+  presentations: PresentationFundamentals[];
+  loading: boolean;
+  failure: boolean;
+  failureMessage: string;
+  selectedPresentation: PresentationFundamentals;
 
   constructor(private http: HttpClient,
               private router: Router) { }
@@ -30,7 +30,7 @@ export class DbPresentationsListComponent implements OnInit {
     this.selectedPresentation = null;
   }
 
-  private getPresentations() {
+  getPresentations() {
     this.loading = true;
 
     this.http.get("data/presentationData")
@@ -49,7 +49,7 @@ export class DbPresentationsListComponent implements OnInit {
       );
   }
 
-  private startPresentation(fundamentals: PresentationFundamentals) {
+  startPresentation(fundamentals: PresentationFundamentals) {
     let presentation = PresentationFundamentals.fromPresentationFundamentals(fundamentals);
     presentation.start(this.http, this.presentationStarted.bind(this));
   }
@@ -63,7 +63,7 @@ export class DbPresentationsListComponent implements OnInit {
     }
   }
 
-  private deletePresentation(fundamentals: PresentationFundamentals) {
+  deletePresentation(fundamentals: PresentationFundamentals) {
     let presentation = PresentationFundamentals.fromPresentationFundamentals(fundamentals);
     presentation.deleteInDB(this.http, this.presentationDeleted.bind(this));
   }

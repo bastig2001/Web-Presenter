@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./presentations-list.component.css']
 })
 export class PresentationsListComponent implements OnInit {
-  private selectedTab = "all";
+  selectedTab = "all";
 
   constructor() { }
 
