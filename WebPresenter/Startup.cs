@@ -90,10 +90,6 @@ namespace WebPresenter {
                 dbContext.Users.Add(new User("anyone"));
             }
 
-            if (dbContext.Presentations.Find("1", "anyone") == null) {
-                dbContext.Presentations.Add(new PresentationData("1", "anyone", "Test"));
-            }
-
             dbContext.SaveChanges();
         }
     }
