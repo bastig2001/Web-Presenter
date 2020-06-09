@@ -32,7 +32,6 @@ namespace WebPresenter.Controllers {
 
         [HttpPost]
         public IActionResult CreatePresentation(PresentationFundamentals fundamentals) {
-            Console.WriteLine(fundamentals);
             if (data.CreatePresentation(fundamentals)) {
                 return Ok();
             }

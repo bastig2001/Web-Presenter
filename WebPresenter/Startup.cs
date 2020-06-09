@@ -1,3 +1,5 @@
+using System;
+using System.Data.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,8 +29,11 @@ namespace WebPresenter {
 
             services.AddSignalR(options => options.EnableDetailedErrors = true);
 
+            var dbConnectionSettings = new DbConnectionSettings();
+            Configuration.GetSection("DB").Bind(dbConnectionSettings);
+            
             services.AddDbContext<WebPresenterContext>(options => 
-                options.UseNpgsql(Configuration.GetConnectionString("DB"))
+                options.UseNpgsql(dbConnectionSettings.GetConnectionString())
             );
 
             services.AddSingleton<StorageService<Presentation>>();

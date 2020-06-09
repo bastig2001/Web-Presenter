@@ -13,12 +13,18 @@ services:
       - 8080:80
     environment:
       ASPNETCORE_URLS: "http://*"
-      ConnectionStrings__DB: "Server=db;Port=5432;Database=WebPresenter;User Id=postgres;Password=wasistpassiert;"
+      ASPNETCORE_EVIRONMENT: "Staging"
+      DB__Server: "db"
+      DB__Port: "5432"
+      DB__Database: "WebPresenter"
+      DB__User: "postgres"
+      DB__Password: "psql"
+  
   db:
     image: postgres:12
     restart: unless-stopped
     container_name: web-presenter-db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: wasistpassiert
-      POSTGRES_DB: WebPresenter
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "psql"
+      POSTGRES_DB: "WebPresenter"
