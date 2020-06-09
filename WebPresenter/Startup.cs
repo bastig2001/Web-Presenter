@@ -28,7 +28,7 @@ namespace WebPresenter {
             services.AddSignalR(options => options.EnableDetailedErrors = true);
 
             services.AddDbContext<WebPresenterContext>(options => 
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultDB"))
+                options.UseNpgsql(Configuration.GetConnectionString("DB"))
             );
 
             services.AddSingleton<StorageService<Presentation>>();
