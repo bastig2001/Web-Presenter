@@ -9,6 +9,7 @@ for server-side code
 for client-side code
 * [Bootstrap](https://github.com/twbs/bootstrap) 
 for layout and styling
+* [Postgresql](https://www.postgresql.org/) as database
 
 
 ## Docker
