@@ -2,7 +2,7 @@ version: "3"
 
 services:
   web-presenter:
-    image: web-presenter
+    image: sebastian2410/web-presenter
     restart: unless-stopped
     container_name: web-presenter
     depends_on:
