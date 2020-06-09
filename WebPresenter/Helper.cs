@@ -36,14 +36,14 @@ namespace WebPresenter {
             var dimension = new FrameDimension(image.FrameDimensionsList[0]);
             int pageCount = image.GetFrameCount(dimension);
             var images = new string[pageCount];
-
+            
             for (int i = 0; i < pageCount; i++) {
                 await using var memoryStream = new MemoryStream();
                 image.SelectActiveFrame(dimension, i);
                 image.Save(memoryStream, ImageFormat.Bmp);
                 images[i] = Convert.ToBase64String(memoryStream.ToArray());
             }
-
+            
             return images;
         }
     }
