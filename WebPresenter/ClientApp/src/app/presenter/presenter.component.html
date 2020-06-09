@@ -3,15 +3,23 @@
   <app-presentation-view></app-presentation-view>
   <app-presentation-controls></app-presentation-controls>
 </div>
-<em *ngIf="ps.isLoadingPresentation || !ps.isConnected && ps.isLoading">
-  Loading...
-</em>
-<em *ngIf="!ps.isConnected && !ps.isLoadingPresentation && !ps.isLoading && !ps.hasEnded">
-  Not Connected
-</em>
-<em *ngIf="ps.hasEnded" style="color: red">
-  The Presentation has been ended.
-</em>
-<em *ngIf="ps.presentationHasLoadingProblem">
-  The Presentation can't be loaded.
-</em>
+<div *ngIf="ps.isLoadingPresentation || !ps.isConnected && ps.isLoading">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<div *ngIf="!ps.isConnected && !ps.isLoadingPresentation && !ps.isLoading && !ps.hasEnded">
+  <div class="alert alert-warning" role="alert">
+    Not Connected
+  </div>
+</div>
+<div *ngIf="ps.hasEnded">
+  <div class="alert alert-warning" role="alert">
+    The Presentation has been ended.
+  </div>
+</div>
+<div *ngIf="ps.presentationHasLoadingProblem">
+  <div class="alert alert-warning" role="alert">
+    The Presentation can't be loaded.
+  </div>
+</div>

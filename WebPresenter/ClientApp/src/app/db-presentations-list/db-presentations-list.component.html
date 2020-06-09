@@ -1,25 +1,32 @@
-<div *ngIf="loading">
-  <div class="spinner-border text-primary"></div>
-  <em>Loading...</em>
+<div class="row" *ngIf="loading">
+  <div class="col">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
 </div>
-<div *ngIf="!loading">
-  <button class="btn-primary" (click)="getPresentations()">Reload</button>
-</div>
-<div *ngIf="failure">
+<div class="row" *ngIf="failure">
   <p style="color: red;">{{failureMessage}}</p>
 </div>
 <div *ngIf="!(loading || failure)">
-  <div *ngFor="let presentation of presentations" class="card" (click)="selectedPresentation = presentation">
-    <div class="card-header">
-      <p>{{presentation.name}}</p>
-      <p>by {{presentation.ownerName}}</p>
+  <div>
+    <div *ngFor="let presentation of presentations" class="card row" (click)="selectedPresentation = presentation">
+      <div class="card-header">
+        <p>Name: {{presentation.name}}</p>
+        <p>made by {{presentation.ownerName}}</p>
+      </div>
+      <div class="card-body">
+        <p style="font-weight: bold">Title: {{presentation.title}}</p>
+      </div>
+      <div class="card-footer collapse" [class.show]="selectedPresentation === presentation">
+        <button class="btn btn-primary" (click)="startPresentation(presentation)">Start</button>
+        <button class="btn btn-danger" (click)="deletePresentation(presentation)">Delete</button>
+      </div>
     </div>
-    <div class="card-body">
-      <p style="font-weight: bold">{{presentation.title}}</p>
-    </div>
-    <div class="card-footer collapse" [class.show]="selectedPresentation === presentation">
-      <button class="btn-primary" (click)="startPresentation(presentation)">Start</button>
-      <button class="btn-danger" (click)="deletePresentation(presentation)">Delete</button>
+  </div>
+  <div class="row my-4" *ngIf="!loading">
+    <div class="col">
+      <button class="btn btn-warning" (click)="getPresentations()">Reload</button>
     </div>
   </div>
 </div>
