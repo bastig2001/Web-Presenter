@@ -1,24 +1,32 @@
-<div *ngIf="loading">
-  <div class="spinner-border text-primary"></div>
-  <em>Loading...</em>
+<div class="row" *ngIf="loading">
+  <div class="col">
+    <div class="spinner-border text-primary"></div>
+    <em>Loading...</em>
+  </div>
 </div>
-<div *ngIf="!loading">
-  <button class="btn-primary" (click)="getPresentations()">Reload</button>
-</div>
-<div *ngIf="failure">
-  <p style="color: red;">{{failureMessage}}</p>
+<div class="row" *ngIf="failure">
+  <div class="col">
+    <div class="alert alert-danger" role="alert">
+      {{failureMessage}}
+    </div>
+  </div>
 </div>
 <div *ngIf="!(loading || failure)">
-  <div *ngFor="let presentation of presentations" class="card" (click)="selectedPresentation = presentation">
+  <div *ngFor="let presentation of presentations" class="card row" (click)="selectedPresentation = presentation">
     <div class="card-header">
-      <p>{{presentation.name}}</p>
-      <p>by {{presentation.ownerName}}</p>
+      <p>Name: {{presentation.name}}</p>
+      <p>made by {{presentation.ownerName}}</p>
     </div>
     <div class="card-body">
-      <p style="font-weight: bold">{{presentation.title}}</p>
+      <p style="font-weight: bold">Title: {{presentation.title}}</p>
     </div>
     <div class="card-footer collapse" [class.show]="selectedPresentation === presentation">
-      <button class="btn-primary" (click)="viewPresentation(presentation)">View</button>
+      <button class="btn btn-primary" (click)="viewPresentation(presentation)">View</button>
+    </div>
+  </div>
+  <div class="row my-4" *ngIf="!loading">
+    <div class="col">
+      <button class="btn btn-warning" (click)="getPresentations()">Reload</button>
     </div>
   </div>
 </div>

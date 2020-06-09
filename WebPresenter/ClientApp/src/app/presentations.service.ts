@@ -205,7 +205,7 @@ export class PresentationsService {
       .subscribe(
         () =>
           this.connection.invoke("ReloadImagePresentation")
-            .then(() => this.getImagePresentation),
+            .then(() => this.getImagePresentation()),
         error => console.error(error)
       );
   }
