@@ -13,7 +13,7 @@ services:
       - 8080:80
     environment:
       ASPNETCORE_URLS: "http://*"
-      ASPNETCORE_EVIRONMENT: "Staging"
+      ASPNETCORE_ENVIRONMENT: "Staging"
       DB__Server: "db"
       DB__Port: "5432"
       DB__Database: "WebPresenter"
