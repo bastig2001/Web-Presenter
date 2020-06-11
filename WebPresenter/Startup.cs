@@ -37,11 +37,11 @@ namespace WebPresenter {
             );
 
             services.AddSingleton<StorageService<Presentation>>();
-            services.AddSingleton<StorageService<string>>();
+            services.AddSingleton<StorageService<Viewer>>();
             
             services.AddTransient<PresentationDataService>();
             services.AddTransient<PresentationsService>();
-            services.AddTransient<GroupManager>();
+            services.AddTransient<ConnectionManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

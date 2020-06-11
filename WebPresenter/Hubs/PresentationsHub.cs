@@ -6,26 +6,58 @@ using WebPresenter.Services;
 namespace WebPresenter.Hubs {
     public class PresentationsHub : Hub {
         private readonly PresentationsService presentations;
-        private readonly GroupManager groups;
+        private readonly ConnectionManager connections;
 
         private string groupName;
         private Presentation presentation;
 
-        public PresentationsHub(PresentationsService presentations, GroupManager groups) {
+        public PresentationsHub(PresentationsService presentations, ConnectionManager connections) {
             this.presentations = presentations;
-            this.groups = groups;
+            this.connections = connections;
         }
 
         public override Task OnConnectedAsync() {
             string presentationId = Context.GetHttpContext().Request.Query["presentation-id"];
-            groups.AddConnectionGroup(Context.ConnectionId, presentationId);
+            string clientType = Context.GetHttpContext().Request.Query["client-type"];
+            string username = Context.GetHttpContext().Request.Query["username"];
+
+            if (clientType == "viewer") {
+                connections.AddClient(
+                    Context.ConnectionId, 
+                    new Viewer(
+                        username, 
+                        presentations.GetPresentation(presentationId), 
+                        presentationId
+                        )
+                    );
+            }
+            else if (clientType == "presenter") {
+                string presenterGroupId = $"{presentationId}-presenter";
+                
+                connections.AddClient(
+                    Context.ConnectionId, 
+                    new Presenter(
+                        username, 
+                        presentations.GetPresentation(presentationId), 
+                        presentationId, 
+                        presenterGroupId
+                        )
+                );
+                Groups.AddToGroupAsync(Context.ConnectionId, presenterGroupId);
+            }
+            
             return Groups.AddToGroupAsync(Context.ConnectionId, $"{presentationId}");
         }
         
         public override Task OnDisconnectedAsync(Exception exception) {
-            string presentationId = groups.GetGroupName(Context.ConnectionId);
-            groups.RemoveConnection(Context.ConnectionId);
-            return Groups.RemoveFromGroupAsync(Context.ConnectionId, $"{presentationId}");
+            Viewer client = connections.GetClient(Context.ConnectionId);
+            connections.RemoveConnection(Context.ConnectionId);
+
+            if (client.GetType() == typeof(Presenter)) {
+                Groups.RemoveFromGroupAsync(Context.ConnectionId, ((Presenter) client).PresenterGroupId);
+            }
+            
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, client.GroupId);
         }
 
         public async Task SetPresentationState(PresentationState presentationState) {
@@ -105,7 +137,7 @@ namespace WebPresenter.Hubs {
         }
 
         private void SetContextVariables() {
-            groupName = groups.GetGroupName(Context.ConnectionId);
+            groupName = connections.GetClient(Context.ConnectionId);
             presentation = presentations.GetPresentation(groupName);
         }
 
