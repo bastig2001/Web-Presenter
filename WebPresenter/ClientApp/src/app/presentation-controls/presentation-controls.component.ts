@@ -50,4 +50,8 @@ export class PresentationControlsComponent implements OnInit {
     this.ps.endPresentation();
   }
 
+  savePresentation() {
+    this.ps.savePresentation();
+  }
+
 }

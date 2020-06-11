@@ -247,6 +247,12 @@ export class PresentationsService {
     return this.presentationId;
   }
 
+  savePresentation() {
+    this.isLoading = true;
+    this.connection.invoke("SavePresentation")
+      .then(() => this.isLoading = false);
+  }
+
   // async uploadImagePresentation(imageFile: File) {
   //   await this.uploadFile("UploadImagePresentation", imageFile);
   // }
