@@ -169,6 +169,14 @@
     </div>
   </div>
   <div class="row mb-5">
+    <div class="alert alert-success" role="alert" *ngIf="savedSuccessfully">
+      {{saveMessage}}
+    </div>
+    <div class="alert alert-danger" role="alert" *ngIf="!savedSuccessfully && savedSuccessfully != undefined">
+      {{saveMessage}}
+    </div>
+  </div>
+  <div class="row mb-5">
     <div class="col">
       <div>
         <label for="end">To end the presentation, click the following button: </label>

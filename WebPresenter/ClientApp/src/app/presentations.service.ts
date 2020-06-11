@@ -247,10 +247,13 @@ export class PresentationsService {
     return this.presentationId;
   }
 
-  savePresentation() {
+  savePresentation(callback: (success: boolean) => void) {
     this.isLoading = true;
     this.connection.invoke("SavePresentation")
-      .then(() => this.isLoading = false);
+      .then(success => {
+        this.isLoading = false;
+        callback(success);
+      });
   }
 
   // async uploadImagePresentation(imageFile: File) {

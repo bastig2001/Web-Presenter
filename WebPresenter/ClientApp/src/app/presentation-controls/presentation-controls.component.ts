@@ -14,6 +14,8 @@ export class PresentationControlsComponent implements OnInit {
   slideNumberInput: number;
   fileInput: File;
   audienceLink: string;
+  savedSuccessfully: boolean;
+  saveMessage: string;
 
   constructor(public ps: PresentationsService) { }
 
@@ -51,7 +53,20 @@ export class PresentationControlsComponent implements OnInit {
   }
 
   savePresentation() {
-    this.ps.savePresentation();
+    this.saveMessage = "";
+    this.savedSuccessfully = undefined;
+    this.ps.savePresentation(this.setSavingSuccess.bind(this));
+  }
+
+  setSavingSuccess(success: boolean) {
+    this.savedSuccessfully = success;
+
+    if (this.savedSuccessfully) {
+      this.saveMessage = "This presentation has been successfully saved to the database.";
+    }
+    else {
+      this.saveMessage = "This presentation wasn't able to be saved to the database.";
+    }
   }
 
 }
