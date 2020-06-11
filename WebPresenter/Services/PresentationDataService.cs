@@ -86,5 +86,22 @@ namespace WebPresenter.Services {
                 return false;
             }
         }
+
+        public bool SavePresentation(PresentationData presentation) {
+            if (presentation == null) {
+                return false;
+            }
+
+            try {
+                db.Presentations.Update(presentation);
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception e) {
+                Console.Error.WriteLine($"Error while trying to save presentation {{{presentation}}}. " +
+                                        $"\nException: {e}");
+                return false;
+            }
+        }
     }
 }

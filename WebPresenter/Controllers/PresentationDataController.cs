@@ -39,6 +39,15 @@ namespace WebPresenter.Controllers {
             return BadRequest();
         }
 
+        [HttpPut]
+        public IActionResult SavePresentation(PresentationData presentation) {
+            if (data.SavePresentation(presentation)) {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
         [HttpDelete("{ownerName}/{name}")]
         public IActionResult RemovePresentation(string ownerName, string name) {
             if (data.RemovePresentation(name, ownerName)) {

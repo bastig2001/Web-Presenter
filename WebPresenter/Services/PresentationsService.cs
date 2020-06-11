@@ -75,5 +75,17 @@ namespace WebPresenter.Services {
         public void EndPresentation(string id) {
             presentations.Remove(id);
         }
+
+        public bool SavePresentation(string id) {
+            return SavePresentation(presentations.GetValueOrDefault(id));
+        }
+
+        public bool SavePresentation(Presentation presentation) {
+            if (presentation == null) {
+                return false;
+            }
+
+            return data.SavePresentation(presentation.Data);
+        }
     }
 }

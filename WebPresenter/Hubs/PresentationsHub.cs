@@ -99,6 +99,11 @@ namespace WebPresenter.Hubs {
             await Clients.OthersInGroup(groupName).SendAsync("EndPresentation");
         }
 
+        public bool SavePresentation() {
+            SetContextVariables();
+            return presentations.SavePresentation(presentation);
+        }
+
         private void SetContextVariables() {
             groupName = groups.GetGroupName(Context.ConnectionId);
             presentation = presentations.GetPresentation(groupName);
