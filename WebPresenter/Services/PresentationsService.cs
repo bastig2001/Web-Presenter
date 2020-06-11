@@ -75,10 +75,5 @@ namespace WebPresenter.Services {
         public void EndPresentation(string id) {
             presentations.Remove(id);
         }
-
-        internal object CreatePresentation()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
